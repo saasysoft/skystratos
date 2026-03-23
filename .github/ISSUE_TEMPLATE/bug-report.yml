@@ -1,0 +1,49 @@
+name: Bug Report
+description: Report a bug in Skyline
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: A clear description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: How can we reproduce this?
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. See error
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should happen instead?
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: If applicable, add screenshots.
+  - type: dropdown
+    id: panel
+    attributes:
+      label: Which panel is affected?
+      options:
+        - Fleet Overview
+        - Maintenance Intelligence
+        - Procurement & Inventory
+        - Cost Analysis
+        - MEL Tracker
+        - AD/SB Compliance
+        - Dispatch Reliability
+        - AOG Timeline
+        - Multi-Station Inventory
+        - Tower AI
+        - Other

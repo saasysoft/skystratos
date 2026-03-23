@@ -1,0 +1,186 @@
+// Skyline Aviation — Alerts Mock Data (15 alerts)
+
+import type { Alert } from './types';
+
+export const alerts: Alert[] = [
+  // ============================================================
+  // CRITICAL (2) — AOG events
+  // ============================================================
+  {
+    id: 'alert-001',
+    type: 'maintenance',
+    severity: 'critical',
+    title: 'AOG: N73805 — Engine Bleed Valve Failure',
+    description: 'N73805 (B737-800) grounded at ORD for 14+ hours. Left engine bleed valve assembly failed. Emergency AOG parts ordered from GE Aviation Spares. Estimated return to service: pending valve delivery (ETA 2026-03-24). 3 scheduled flights cancelled, revenue impact ~$380K.',
+    aircraftId: 'ac-005',
+    tailNumber: 'N73805',
+    createdAt: '2026-03-22T08:15:00Z',
+    acknowledged: false,
+  },
+  {
+    id: 'alert-002',
+    type: 'maintenance',
+    severity: 'critical',
+    title: 'AOG: N320A3 — Flight Management Computer Failure',
+    description: 'N320A3 (A320neo) grounded at LAX. FMC unit failed during pre-flight checks. Replacement FMC ordered on emergency basis from Honeywell. Software load and recertification required post-install. 2 scheduled flights cancelled, revenue impact ~$260K.',
+    aircraftId: 'ac-015',
+    tailNumber: 'N320A3',
+    createdAt: '2026-03-21T14:30:00Z',
+    acknowledged: false,
+  },
+
+  // ============================================================
+  // HIGH (4) — MEL limits, overdue maintenance
+  // ============================================================
+  {
+    id: 'alert-003',
+    type: 'mel',
+    severity: 'high',
+    title: 'MEL Expiry Warning: N73805 — 4 Active Items',
+    description: 'N73805 has accumulated 4 active MEL items (Cat A: 2, Cat B: 1, Cat D: 1). Two Category A items expire within 48 hours. MEL accumulation increases dispatch risk. Coordinate rectification with AOG recovery.',
+    aircraftId: 'ac-005',
+    tailNumber: 'N73805',
+    createdAt: '2026-03-23T06:00:00Z',
+    acknowledged: false,
+  },
+  {
+    id: 'alert-004',
+    type: 'mel',
+    severity: 'high',
+    title: 'MEL Expiry Imminent: N321A1 Weather Radar & N320A3 APU',
+    description: 'Two Category B MEL items expire today (2026-03-23): N321A1 weather radar tilt mechanism and N320A3 APU bleed output. Both require rectification or extension before next dispatch.',
+    aircraftId: null,
+    tailNumber: null,
+    createdAt: '2026-03-23T05:00:00Z',
+    acknowledged: false,
+  },
+  {
+    id: 'alert-005',
+    type: 'maintenance',
+    severity: 'high',
+    title: 'Fleet Pattern: A320neo LEAP-1A Combustion Chamber Issue',
+    description: '3 of 6 A320neo aircraft (N320A1, N320A3, N320A5) showing similar unscheduled engine maintenance on CFM LEAP-1A combustion chambers. Elevated EGT trends and combustion liner cracking detected. Potential fleet-wide issue requiring OEM coordination with Safran/CFM.',
+    aircraftId: null,
+    tailNumber: null,
+    createdAt: '2026-03-22T10:00:00Z',
+    acknowledged: false,
+  },
+  {
+    id: 'alert-006',
+    type: 'maintenance',
+    severity: 'high',
+    title: 'Overdue C-Check: N77701 (B777-300ER)',
+    description: 'N77701 C-Check overdue by 8 days (due 2026-03-15). Aircraft currently in flight LAX-SIN. Must be inducted into SIN MRO Hub upon arrival. Extended operation past C-Check interval requires regulatory justification.',
+    aircraftId: 'ac-027',
+    tailNumber: 'N77701',
+    createdAt: '2026-03-23T07:00:00Z',
+    acknowledged: false,
+  },
+
+  // ============================================================
+  // MEDIUM (5) — low stock, upcoming heavy checks
+  // ============================================================
+  {
+    id: 'alert-007',
+    type: 'inventory',
+    severity: 'medium',
+    title: 'Critical Stock: LEAP-1A Combustion Liners Below Minimum',
+    description: 'LEAP-1A combustion chamber liner segments at LAX depot down to 1 unit (minimum: 3). With 3 A320neo engines requiring attention, current stock is insufficient. Replenishment orders placed but lead time is 28 days.',
+    aircraftId: null,
+    tailNumber: null,
+    createdAt: '2026-03-22T12:00:00Z',
+    acknowledged: false,
+  },
+  {
+    id: 'alert-008',
+    type: 'inventory',
+    severity: 'medium',
+    title: 'Out of Stock: Flight Director Computer #1 at ORD',
+    description: 'FD Computer #1 (B737) is out of stock at ORD MRO Hub. N73803 has active MEL for FD pitch bar dropout. Next delivery expected 2026-04-05. Consider inter-hub transfer from other locations.',
+    aircraftId: 'ac-003',
+    tailNumber: 'N73803',
+    createdAt: '2026-03-22T09:30:00Z',
+    acknowledged: false,
+  },
+  {
+    id: 'alert-009',
+    type: 'cost',
+    severity: 'medium',
+    title: 'Budget Overrun: Fleet Costs $6.8M Over Budget (March)',
+    description: 'March 2026 fleet costs projected at $44.8M vs $38M budget. Unscheduled maintenance costs have doubled from 6% to 12% of total over 12 months. AOG downtime costs spiked to $3.8M. Primary drivers: N77702 engine shop visit, N73805 AOG, A320neo fleet engine issues.',
+    aircraftId: null,
+    tailNumber: null,
+    createdAt: '2026-03-23T08:00:00Z',
+    acknowledged: false,
+  },
+  {
+    id: 'alert-010',
+    type: 'procurement',
+    severity: 'medium',
+    title: 'AOG Procurement Premium: $2.4M in Emergency Orders (March)',
+    description: '15 emergency/AOG procurement orders placed in March with premium surcharges totaling estimated $2.4M above standard pricing. Largest items: GE90 HPT nozzle vanes ($840K), LEAP-1A hot section kit ($550K), FMC unit ($462K).',
+    aircraftId: null,
+    tailNumber: null,
+    createdAt: '2026-03-22T16:00:00Z',
+    acknowledged: false,
+  },
+  {
+    id: 'alert-011',
+    type: 'maintenance',
+    severity: 'medium',
+    title: 'Heavy Check Upcoming: N77702 Engine Shop Visit at SIN',
+    description: 'N77702 GE90-115B engine shop visit in progress at SIN MRO Hub. HPT blade replacement and hot section inspection. Expected completion 2026-04-15. Total estimated cost: $7.5M. HPT blade set shipment en route.',
+    aircraftId: 'ac-028',
+    tailNumber: 'N77702',
+    createdAt: '2026-03-20T11:00:00Z',
+    acknowledged: true,
+  },
+
+  // ============================================================
+  // LOW (4) — routine scheduling
+  // ============================================================
+  {
+    id: 'alert-012',
+    type: 'compliance',
+    severity: 'low',
+    title: 'AD Compliance Due: Spoiler Actuator Inspection (A320 Fleet)',
+    description: 'AD-2026-03-15 requires spoiler actuator inspection on all A320neo aircraft. Due date: 2026-04-25. Parts on order. N320A2 scheduled first.',
+    aircraftId: null,
+    tailNumber: null,
+    createdAt: '2026-03-20T10:00:00Z',
+    acknowledged: true,
+  },
+  {
+    id: 'alert-013',
+    type: 'maintenance',
+    severity: 'low',
+    title: 'Scheduled: N73808 C-Check Progressing on Track',
+    description: 'N73808 C-Check at DFW Heavy Maintenance on schedule. Structural NDT phase complete. Currently in systems inspection phase. Estimated completion: 2026-04-10.',
+    aircraftId: 'ac-008',
+    tailNumber: 'N73808',
+    createdAt: '2026-03-22T14:00:00Z',
+    acknowledged: true,
+  },
+  {
+    id: 'alert-014',
+    type: 'safety',
+    severity: 'low',
+    title: 'Life Raft Overhaul Due: N78903 Units Approaching Interval',
+    description: 'Two life raft units on N78903 approaching overhaul interval. Procurement approval pending for overhaul service. No immediate dispatch restriction.',
+    aircraftId: 'ac-025',
+    tailNumber: 'N78903',
+    createdAt: '2026-03-19T09:00:00Z',
+    acknowledged: true,
+  },
+  {
+    id: 'alert-015',
+    type: 'maintenance',
+    severity: 'low',
+    title: 'Routine: 8 Aircraft Due for Line Check in Next 30 Days',
+    description: 'Standard 90-day line checks due for N38M01, N38M03, N321A2, N320A4, N73806, N78903, N35002, and N321A4. All within normal scheduling window. No conflicts with scheduled heavy maintenance.',
+    aircraftId: null,
+    tailNumber: null,
+    createdAt: '2026-03-21T08:00:00Z',
+    acknowledged: true,
+  },
+];

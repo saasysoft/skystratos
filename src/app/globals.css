@@ -1,0 +1,238 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* maplibre-gl.css is imported in FleetMapGL.tsx (lazy-loaded) — not needed here */
+
+/* ============================================
+   SKYLINE — Aviation Fleet Intelligence HUD
+   Based on cockpit display standards
+   ============================================ */
+
+:root {
+  --hud-bg: #0A0E14;
+  --hud-surface: #0C1218;
+  --hud-border: #1A2A3C;
+  --hud-border-glow: #0088FF;
+  --hud-primary: #0088FF;
+  --hud-secondary: #FFB800;
+  --hud-nominal: #00FF9F;
+  --hud-warning: #FF8C00;
+  --hud-critical: #FF3B3B;
+  --hud-muted: #2A3A5A;
+  --hud-text-primary: #E0EEFF;
+  --hud-text-secondary: #7BA8D9;
+  --hud-text-dim: #5A7A9B;
+}
+
+/* ---- Base ---- */
+body {
+  background: var(--hud-bg);
+  color: var(--hud-text-primary);
+  font-family: 'Inter', 'Noto Sans TC', sans-serif;
+  overflow: hidden;
+  min-height: 100vh;
+}
+
+/* Ambient grid texture — adds depth to the dark background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 136, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 136, 255, 0.015) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Depth vignette — darkens edges for cockpit console feel */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 5, 10, 0.4) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ---- Selection ---- */
+::selection {
+  background: rgba(0, 136, 255, 0.3);
+  color: #fff;
+}
+
+/* ---- Scrollbar ---- */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--hud-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--hud-border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--hud-muted);
+}
+
+/* ============================================
+   HUD Panel — Glass Effect
+   ============================================ */
+
+/* Safe mode (default — no backdrop-filter, works on Intel iGPU) */
+.hud-panel {
+  background: linear-gradient(135deg, rgba(0, 68, 170, 0.12), rgba(0, 30, 70, 0.15));
+  border: 1px solid rgba(0, 136, 255, 0.15);
+  box-shadow:
+    0 0 0 1px rgba(0, 136, 255, 0.05),
+    inset 0 1px 0 rgba(0, 136, 255, 0.1),
+    0 4px 24px rgba(0, 0, 0, 0.6);
+  position: relative;
+}
+
+/* Full glass mode — toggled via Ctrl+Shift+G */
+[data-glass="full"] .hud-panel {
+  background: linear-gradient(135deg, rgba(0, 136, 255, 0.04), rgba(0, 30, 70, 0.06));
+  backdrop-filter: blur(8px);
+}
+
+.hud-panel.active,
+.hud-panel[data-active="true"] {
+  border-color: rgba(0, 136, 255, 0.4);
+  box-shadow:
+    0 0 20px rgba(0, 136, 255, 0.1),
+    0 0 40px rgba(0, 136, 255, 0.05),
+    inset 0 1px 0 rgba(0, 136, 255, 0.2),
+    0 4px 24px rgba(0, 0, 0, 0.6);
+}
+
+/* ============================================
+   HUD Clip-Path Chrome (replaces augmented-ui)
+   ============================================ */
+.hud-clip {
+  clip-path: polygon(
+    0 12px, 12px 0, calc(100% - 12px) 0, 100% 12px,
+    100% calc(100% - 12px), calc(100% - 12px) 100%,
+    12px 100%, 0 calc(100% - 12px)
+  );
+}
+
+.hud-clip-sm {
+  clip-path: polygon(
+    0 8px, 8px 0, calc(100% - 8px) 0, 100% 8px,
+    100% calc(100% - 8px), calc(100% - 8px) 100%,
+    8px 100%, 0 calc(100% - 8px)
+  );
+}
+
+/* ============================================
+   CRT Scanline Overlay
+   ============================================ */
+.hud-scanlines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ============================================
+   HUD Label Typography
+   ============================================ */
+.hud-label {
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 11px;
+  color: var(--hud-text-dim);
+}
+
+.hud-value {
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
+  color: var(--hud-primary);
+}
+
+/* ============================================
+   Status Indicators
+   ============================================ */
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.status-dot.nominal { background: var(--hud-nominal); }
+.status-dot.warning { background: var(--hud-warning); animation: pulse 2s ease-in-out infinite; }
+.status-dot.critical { background: var(--hud-critical); animation: pulse 0.8s ease-in-out infinite; }
+.status-dot.offline { background: var(--hud-muted); }
+
+/* ============================================
+   Recharts Overrides (HUD palette)
+   ============================================ */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: rgba(0, 136, 255, 0.08) !important;
+}
+.recharts-text {
+  fill: var(--hud-text-dim) !important;
+  font-family: 'Share Tech Mono', monospace !important;
+  font-size: 11px !important;
+}
+.recharts-tooltip-wrapper .recharts-default-tooltip {
+  background: var(--hud-surface) !important;
+  border: 1px solid var(--hud-border) !important;
+  border-radius: 0 !important;
+}
+
+/* ============================================
+   Radar Canvas Glow
+   ============================================ */
+.radar-glow {
+  filter: drop-shadow(0 0 8px rgba(0, 255, 65, 0.3));
+}
+
+/* ============================================
+   Reduced Motion (Accessibility)
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================
+   Print Stylesheet
+   ============================================ */
+@media print {
+  body {
+    background: white !important;
+    color: #000 !important;
+    overflow: visible !important;
+  }
+  .hud-panel {
+    background: white !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+  .hud-scanlines::after { display: none !important; }
+  .hud-clip, .hud-clip-sm { clip-path: none !important; }
+  .hud-label { color: #666 !important; }
+  .hud-value { color: #000 !important; }
+  .recharts-text { fill: #333 !important; }
+  nav, .status-bar, [data-no-print] { display: none !important; }
+}
