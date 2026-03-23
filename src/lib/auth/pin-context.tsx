@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from 'react'
 
-const STORAGE_KEY = 'skyline-auth'
+const STORAGE_KEY = 'skystratos-auth'
 
 interface AuthContextValue {
   isAuthenticated: boolean

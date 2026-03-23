@@ -1,4 +1,4 @@
-// Skyline Aviation — Alerts Mock Data (15 alerts)
+// SkyStratos Aviation — Alerts Mock Data (15 alerts)
 
 import type { Alert } from './types';
 

@@ -1,4 +1,4 @@
-// Skyline Aviation — Procurement Records Mock Data (50 records)
+// SkyStratos Aviation — Procurement Records Mock Data (50 records)
 
 import type { ProcurementRecord } from './types';
 

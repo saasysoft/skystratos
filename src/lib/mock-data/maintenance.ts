@@ -1,4 +1,4 @@
-// Skyline Aviation — Maintenance Records Mock Data (70 records)
+// SkyStratos Aviation — Maintenance Records Mock Data (70 records)
 
 import type { MaintenanceRecord } from './types';
 

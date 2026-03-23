@@ -1,4 +1,4 @@
-// Skyline Aviation — Data Access Layer
+// SkyStratos Aviation — Data Access Layer
 // Abstraction over mock data so panels and tool handlers never import mock data directly.
 
 import {

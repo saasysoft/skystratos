@@ -1,5 +1,5 @@
 name: Bug Report
-description: Report a bug in Skyline
+description: Report a bug in SkyStratos
 title: "[Bug]: "
 labels: ["bug", "needs-triage"]
 body:

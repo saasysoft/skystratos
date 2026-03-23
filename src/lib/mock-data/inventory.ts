@@ -1,4 +1,4 @@
-// Skyline Aviation — Inventory Items Mock Data (100 items across 5 locations)
+// SkyStratos Aviation — Inventory Items Mock Data (100 items across 5 locations)
 
 import type { InventoryItem } from './types';
 

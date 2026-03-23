@@ -120,12 +120,12 @@ export default function PINGate({ onSuccess }: PINGateProps) {
       />
 
       <div className="relative z-10 flex flex-col items-center gap-8">
-        {/* SKYLINE title */}
+        {/* SKYSTRATOS title */}
         <div className="flex flex-col items-center gap-3">
           <h1 className="text-5xl tracking-[0.4em] uppercase select-none"
             style={{ fontFamily: "'Share Tech Mono', monospace", color: '#0088FF' }}
           >
-            SKYLINE
+            SKYSTRATOS
           </h1>
           <div className="flex flex-col items-center gap-1">
             <p className="text-lg tracking-wide"

@@ -1,4 +1,4 @@
-# Contributing to Skyline
+# Contributing to SkyStratos
 
 ## Branch Strategy
 

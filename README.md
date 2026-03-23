@@ -1,11 +1,11 @@
 ```
- ███████╗██╗  ██╗██╗   ██╗██╗     ██╗███╗   ██╗███████╗
- ██╔════╝██║ ██╔╝╚██╗ ██╔╝██║     ██║████╗  ██║██╔════╝
- ███████╗█████╔╝  ╚████╔╝ ██║     ██║██╔██╗ ██║█████╗
- ╚════██║██╔═██╗   ╚██╔╝  ██║     ██║██║╚██╗██║██╔══╝
- ███████║██║  ██╗   ██║   ███████╗██║██║ ╚████║███████╗
- ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝╚═╝  ╚═══╝╚══════╝
-        Airline Fleet Operations Intelligence Platform
+ ███████╗██╗  ██╗██╗   ██╗███████╗████████╗██████╗  █████╗ ████████╗ ██████╗ ███████╗
+ ██╔════╝██║ ██╔╝╚██╗ ██╔╝██╔════╝╚══██╔══╝██╔══██╗██╔══██╗╚══██╔══╝██╔═══██╗██╔════╝
+ ███████╗█████╔╝  ╚████╔╝ ███████╗   ██║   ██████╔╝███████║   ██║   ██║   ██║███████╗
+ ╚════██║██╔═██╗   ╚██╔╝  ╚════██║   ██║   ██╔══██╗██╔══██║   ██║   ██║   ██║╚════██║
+ ███████║██║  ██╗   ██║   ███████║   ██║   ██║  ██║██║  ██║   ██║   ╚██████╔╝███████║
+ ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚══════╝
+              Airline Fleet Operations Intelligence Platform
 ```
 
 > AI-powered fleet management dashboard for airline maintenance executives. Track aircraft health, predict failures, optimize procurement, and reduce AOG costs — with an AI copilot that speaks aviation.
@@ -21,7 +21,7 @@
 
 Airlines lose millions annually because their maintenance systems (MRO software), parts inventory, procurement, and financial reporting live in disconnected silos. Deferred maintenance cascades into emergency repairs, AOG (Aircraft on Ground) events, and emergency parts procurement at 50-300% markups.
 
-**Skyline** unifies these data streams into a single cockpit-style dashboard and uses AI to surface the connections executives can't see in spreadsheets.
+**SkyStratos** unifies these data streams into a single cockpit-style dashboard and uses AI to surface the connections executives can't see in spreadsheets.
 
 ---
 
@@ -67,8 +67,8 @@ Cockpit-inspired dark theme with aviation blue/amber palette. Monospace typograp
 ### Setup
 
 ```bash
-git clone https://github.com/saasysoft/skyline.git
-cd skyline
+git clone https://github.com/saasysoft/skystratos.git
+cd skystratos
 npm install
 cp .env.example .env.local
 # Add your ANTHROPIC_API_KEY to .env.local
@@ -124,7 +124,7 @@ src/
 
 ## Mock Data
 
-Skyline ships with realistic demo data:
+SkyStratos ships with realistic demo data:
 
 - **30 aircraft** across 8 types (B737-800, A320neo, B787-9, B777-300ER, etc.)
 - **70 maintenance records** with a fleet-wide CFM LEAP-1A pattern

@@ -17,7 +17,7 @@ const shareTechMono = Share_Tech_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Skyline Fleet Intelligence',
+  title: 'SkyStratos Fleet Intelligence',
   description: 'Real-time airline fleet operations dashboard with AI-powered fleet intelligence, ADS-B tracking, and operational analytics.',
 }
 

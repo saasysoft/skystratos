@@ -1,4 +1,4 @@
-// Skyline Aviation — Monthly Cost Data (12 months: 2025-04 through 2026-03)
+// SkyStratos Aviation — Monthly Cost Data (12 months: 2025-04 through 2026-03)
 // Unscheduled maintenance trending UP, AOG costs spiking in recent months
 
 import type { MonthlyCostData } from './types';

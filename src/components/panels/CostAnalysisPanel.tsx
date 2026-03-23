@@ -22,7 +22,7 @@ import { getCostData } from '@/lib/data'
 import { useTranslation } from '@/lib/i18n/use-translation'
 
 /* ============================================
-   HUD Color Tokens (Skyline aviation palette)
+   HUD Color Tokens (SkyStratos aviation palette)
    ============================================ */
 const HUD = {
   primary: '#0088FF',

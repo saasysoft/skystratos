@@ -44,7 +44,7 @@ const TOUR_STEPS: TourStep[] = [
   },
 ]
 
-const STORAGE_KEY = 'skyline-tour-completed'
+const STORAGE_KEY = 'skystratos-tour-completed'
 
 // ---------------------------------------------------------------------------
 // Helpers

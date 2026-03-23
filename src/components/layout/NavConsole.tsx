@@ -85,10 +85,10 @@ export default function NavConsole({ activeTab, onTabChange, onTowerToggle, towe
         role="tablist"
         aria-label="Bridge navigation"
       >
-        {/* SKYLINE wordmark */}
+        {/* SKYSTRATOS wordmark */}
         <div className="flex items-center px-5 border-r border-hud-border shrink-0">
           <span className="font-mono text-hud-sm text-hud-primary tracking-[0.3em] font-normal">
-            SKYLINE
+            SKYSTRATOS
           </span>
         </div>
 

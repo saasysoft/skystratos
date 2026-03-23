@@ -19,7 +19,7 @@ export class HUDErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error) {
-    console.error('[SKYLINE] System error:', error)
+    console.error('[SKYSTRATOS] System error:', error)
   }
 
   handleRetry = () => {

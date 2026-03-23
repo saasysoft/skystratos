@@ -1,4 +1,4 @@
-// Skyline Aviation — Scheduled Flights Mock Data (3-day forward schedule)
+// SkyStratos Aviation — Scheduled Flights Mock Data (3-day forward schedule)
 // "Today" = 2026-03-23. Schedule covers 2026-03-23, 2026-03-24, 2026-03-25.
 // AOG aircraft (N73805=ac-005, N320A3=ac-015) have flights in schedule but are grounded.
 

@@ -1,4 +1,4 @@
-// Skyline Aviation — Aircraft Fleet Mock Data (30 aircraft)
+// SkyStratos Aviation — Aircraft Fleet Mock Data (30 aircraft)
 
 import type { Aircraft } from './types';
 

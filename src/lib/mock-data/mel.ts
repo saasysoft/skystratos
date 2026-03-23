@@ -1,4 +1,4 @@
-// Skyline Aviation — MEL (Minimum Equipment List) Items Mock Data (25 items)
+// SkyStratos Aviation — MEL (Minimum Equipment List) Items Mock Data (25 items)
 // "Today" = 2026-03-23
 
 import type { MELItem } from './types';

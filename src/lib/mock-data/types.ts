@@ -1,4 +1,4 @@
-// Skyline Aviation Operations Dashboard — Type Definitions
+// SkyStratos Aviation Operations Dashboard — Type Definitions
 
 export type AircraftType = 'B737-800' | 'B737 MAX 8' | 'A320neo' | 'A321neo' | 'B787-9' | 'B777-300ER' | 'A350-900' | 'E175';
 export type AircraftStatus = 'In Flight' | 'On Ground' | 'In Maintenance' | 'AOG';

@@ -167,7 +167,7 @@ export function BootSequence({ onComplete }: BootSequenceProps) {
           className="text-lg tracking-wider mb-2"
           style={{ color: '#0088FF', opacity: 0 }}
         >
-          [SKYLINE FLEET INTELLIGENCE v2.1.0]
+          [SKYSTRATOS FLEET INTELLIGENCE v2.1.0]
         </div>
 
         {/* Separator line */}

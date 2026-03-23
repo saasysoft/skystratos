@@ -1,4 +1,4 @@
-// Skyline Aviation — Mock Data Barrel File
+// SkyStratos Aviation — Mock Data Barrel File
 
 export { aircraft } from './aircraft';
 export { maintenanceRecords } from './maintenance';

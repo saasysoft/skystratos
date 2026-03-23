@@ -107,7 +107,7 @@ function DashboardInner() {
     setAppState('dashboard')
     // Show guided tour for first-time users
     try {
-      if (localStorage.getItem('skyline-tour-completed') !== 'true') {
+      if (localStorage.getItem('skystratos-tour-completed') !== 'true') {
         setTimeout(() => setShowTour(true), 400)
       }
     } catch {

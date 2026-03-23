@@ -38,7 +38,7 @@
     "nominal": "NOMINAL",
     "alert": "ALERT",
     "alerts": "ALERTS",
-    "systemId": "SKYLINE v2.1.0"
+    "systemId": "SKYSTRATOS v2.1.0"
   },
   "maintenance": {
     "overdueAlerts": "Overdue Maintenance Alerts",
@@ -136,7 +136,7 @@
     "perMonth": "/mo"
   },
   "boot": {
-    "title": "SKYLINE FLEET INTELLIGENCE v2.1.0",
+    "title": "SKYSTRATOS FLEET INTELLIGENCE v2.1.0",
     "adsb": "ADS-B Feed: Simulation Mode",
     "adsbDetail": "30 aircraft tracked",
     "mro": "MRO Database Synced",
