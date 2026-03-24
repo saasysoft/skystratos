@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { Share_Tech_Mono } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
 
 const inter = Inter({
@@ -30,6 +31,7 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${shareTechMono.variable}`}>
       <body className="font-sans bg-hud-bg text-hud-text-primary antialiased">
         {children}
+        <Analytics />
       </body>
     </html>
   )

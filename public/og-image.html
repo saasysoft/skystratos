@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkyStratos OG Image Reference</title>
+  <style>
+    /* OG Image Reference — 1200x630 */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: #111;
+    }
+    .og-card {
+      width: 1200px;
+      height: 630px;
+      background: #0A0E14;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #1a2030;
+    }
+    .og-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, #0088FF, transparent);
+    }
+    .og-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, #0088FF, transparent);
+    }
+    .grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,136,255,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,136,255,0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .title {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 72px;
+      color: #FFFFFF;
+      letter-spacing: 12px;
+      position: relative;
+      z-index: 1;
+    }
+    .accent {
+      color: #0088FF;
+    }
+    .subtitle {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 24px;
+      color: rgba(255,255,255,0.6);
+      margin-top: 16px;
+      letter-spacing: 4px;
+      position: relative;
+      z-index: 1;
+    }
+    .divider {
+      width: 120px;
+      height: 2px;
+      background: #0088FF;
+      margin: 24px 0;
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="og-card">
+    <div class="grid-bg"></div>
+    <div class="title">SKY<span class="accent">STRATOS</span></div>
+    <div class="divider"></div>
+    <div class="subtitle">Airline Fleet Operations Intelligence</div>
+  </div>
+</body>
+</html>
