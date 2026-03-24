@@ -1,0 +1,9 @@
+enabled: true
+default_mode: auto
+lenses:
+  - technical
+  - journey
+  - patterns
+  - business
+created: 2026-03-24T00:20:00Z
+session_count: 1

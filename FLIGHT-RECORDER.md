@@ -1,0 +1,52 @@
+# Flight Recorder — SkyStratos
+
+> Black box build log. Each session appends an entry below.
+> Check the recorder to understand what happened and why.
+
+**Created:** 2026-03-24T00:20:00Z
+**Lenses:** Technical, Journey, Patterns, Business
+**Default mode:** Auto
+
+---
+
+## Session 1 | 2026-03-23T22:00Z | [mode: debrief — first session]
+
+**Objective:** Build a complete airline fleet operations intelligence platform adapted from Triton (maritime), deploy to Vercel, and set up GitHub repo.
+**Outcome:** Full application built, renamed, deployed, and live at https://skystratos.robobffs.site
+
+### Technical
+- Adapted from Triton maritime dashboard — actual reuse was ~40% (HUD primitives + layout), not the 80% initially assumed
+- Stack: Next.js 14, React 18, TypeScript, Tailwind CSS, Recharts, Framer Motion, GSAP, MapLibre GL, Anthropic Claude API
+- 57 source files, 24,435 lines across 6 build waves
+- Aviation data model is fundamentally different from maritime: multi-trigger maintenance (hours/cycles/calendar), MEL deferrals (Cat A/B/C/D with time limits), ATA chapter system, rotable vs expendable parts
+- Tower AI has 9 tools (2 more than Triton's Helmsman): added `query_mel_status` and `query_compliance` for aviation-specific domains
+- FleetMapGL rewritten with great circle route arcs (20-point sine-curve interpolation) and airport markers instead of ship dots and ports
+- RadarDisplay rewritten centered on ORD (41.97, -87.91) with 500nm range instead of Kaohsiung maritime center
+- Bulletproof caught critical issue: PIN Gate is client-only (PIN '8888' visible in JS bundle, zero server-side auth on API routes). Accepted for demo, server-side auth deferred.
+- TypeScript compiles clean with 0 errors across all 57 files
+- Model choice: claude-sonnet-4-6 for Tower AI (sufficient for 9-tool queries, 5x cheaper than Opus)
+
+### Journey
+- Started from cloning `robobffs/triton` as reference
+- Blueprint written first — 13-section product spec mapping every Triton concept to aviation equivalent
+- Bulletproof pass found 26 issues before a single line of code was written (4 critical). The "80% carries over" claim was the biggest misconception — corrected to 40%.
+- Operation Full Send executed 6 waves with 12 parallel agent spawns. Waves 3-5 ran 2-3 agents in parallel each.
+- Name changed from Skyline to SkyStratos mid-build (Skyline too common). rename-sync updated 37 files atomically.
+- Deployed to Vercel under 404redteam scope at robobffs.site subdomain. Had to relink project from personal scope to team scope.
+- Session covered: blueprint → bulletproof → operation planning → 6-wave build → GitHub setup → rename → Vercel deploy. Entire lifecycle in one session.
+
+### Patterns
+- **Operation Full Send for dashboard apps**: Panels are naturally independent — perfect for wave-based parallel builds. Data layer (Wave 2) is the critical path; everything parallelizes after it.
+- **Bulletproof before build**: Caught the MEL data phase ordering dependency (Phase 3 Tower AI needed MEL data built in Phase 4). Would have been a blocking runtime error during build.
+- **rename-sync for mid-project renames**: Python find-replace script with ordered replacement rules (most specific first) updated 37 files atomically. Verify with grep after — only gitignored files had stale refs.
+- **Triton → SkyStratos fork pattern**: When adapting a product to a new vertical, tag every file as COPY/REWRITE/NEW before estimating. Actual reuse was half what was initially assumed.
+- **Distill candidate:** Yes — "Vertical Fork" pattern: how to adapt a domain-specific dashboard to a new industry. Includes domain mapping table, type system rewrite, AI prompt adaptation, mock data generation at scale.
+
+### Business
+- Build duration: ~1 session (blueprint through deploy)
+- Cost: Estimated $5-8 in Claude API (all Tier 3 agents). Actual likely in that range.
+- Deliverables: 9-panel dashboard, Tower AI copilot, HUD design system, 8 mock data domains, live Vercel deployment
+- GitHub: https://github.com/saasysoft/skystratos (public, MIT license)
+- Live: https://skystratos.robobffs.site
+- Target market: Airlines, $50K-$500K/yr contract value (higher than Triton's maritime $20K-$100K)
+- Next milestone: Visual QA pass, then production hardening (auth, rate limiting, streaming)

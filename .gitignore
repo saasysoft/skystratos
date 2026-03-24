@@ -42,3 +42,5 @@ operations/
 BUILD-STATUS-*.md
 BUILD-SUMMARY.md
 BLUEPRINT.md
+
+.vercel
