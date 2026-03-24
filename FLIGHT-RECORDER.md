@@ -50,3 +50,51 @@
 - Live: https://skystratos.robobffs.site
 - Target market: Airlines, $50K-$500K/yr contract value (higher than Triton's maritime $20K-$100K)
 - Next milestone: Visual QA pass, then production hardening (auth, rate limiting, streaming)
+
+---
+
+## Session 2-3 | 2026-03-25T01:00Z | [mode: auto — Operation Full Send]
+
+**Objective:** Add conversion-focused public landing page, auth hardening, polished demo sign-in, and supporting pages to the existing SkyStratos dashboard.
+**Outcome:** Full landing page built, auth moved server-side, all pages verified. Not yet deployed.
+
+### Technical
+- **Blueprint pipeline** produced 8 artifacts (PRD Rev 2, capability scan, Sherpa review, error handling, foundation spec, touchpoint map, model routing) before any code was written
+- **Bulletproof** found 19 issues (4 CRITICAL, 5 HIGH, 8 MED, 2 LOW) — all resolved in amendments. Biggest finding: client-side PIN '8888' + sessionStorage auth + no middleware = zero effective security.
+- **Operation Full Send** executed 6 waves with 12 parallel agent spawns, producing 34 new files and ~4,100 lines of code
+- Route groups: `(marketing)/` for public pages, `(app)/` for protected. Complete bundle isolation — landing page never imports MapLibre, Recharts, or Anthropic SDK.
+- Auth hardened: `POST /api/auth/verify-pin` validates against `DEMO_PIN` env var, sets httpOnly cookie. `middleware.ts` protects `/dashboard/*`. Tower API checks cookie.
+- Landing page bundle: 47.8KB page JS (budget was 150KB) — 68% under budget
+- Scroll-stop hero: 3-phase Framer Motion animation (assembled → exploded with cost labels → dashboard reveal). Mobile fallback with card carousel. Reduced motion support. Placeholder containers ready for Nano Banana asset drop-in.
+- Demo request form: Zod validation, honeypot field, UTM param capture, sessionStorage persistence, Slack webhook (URL validated against hooks.slack.com, mrkdwn sanitized)
+- SEO: sitemap.ts, robots.ts, JSON-LD SoftwareApplication schema, OG placeholder (SVG — needs PNG), security headers (X-Frame-Options, X-Content-Type-Options, Referrer-Policy)
+- New dependencies: zod@4.3.6, @vercel/analytics
+- TypeScript: 0 errors across all 83 source files. Build: 14 static pages, all pass.
+- Zod v4 note: uses `error: string` instead of v3's `errorMap` callback for z.enum
+
+### Journey
+- Started from the Session 1 handoff — dashboard was complete and deployed, needed a public face
+- Watched jv-46 video (Nano Banana scroll-stop technique) → wrote PRD → ran full Blueprint pipeline
+- User refined scope mid-blueprint: cut from 10 sections to 6, added sign-in page spec, clarified enterprise sales motion ("each airline is custom"), no self-serve pricing
+- Bulletproof was the pivotal moment — surfaced that auth was zero-security and route restructure was the real risk, not the landing page content. Added Phase 0 (auth hardening) as prerequisite.
+- Operation planned with 17 pre-approved decisions — zero mid-build interruptions
+- Waves 3-4 ran 3 and 2 agents in parallel respectively — sections are naturally independent
+- HUDButton renders `type="button"` internally, couldn't use for form submit — used native button with matching HUD styles instead (discovered during Wave 5 assembly)
+- Session 1's "deferred auth" became Session 2-3's Wave 1 — the tech debt was paid immediately
+
+### Patterns
+- **Blueprint → Bulletproof → Operation pipeline**: The three-stage hardening (conceptual → technical → execution) caught issues at each layer that the previous layer missed. Blueprint caught scope bloat. Bulletproof caught security holes. The Operation's pre-approval model meant zero human interruptions during execution.
+- **Auth hardening as Wave 1 prerequisite**: When adding public routes to a previously-all-private app, auth must be server-side BEFORE route groups are created. Client-side auth (sessionStorage) provides zero protection once SSR renders pages. This is now a hard rule for all future operations.
+- **Route group bundle isolation**: Next.js `(marketing)` and `(app)` route groups naturally isolate bundles. Marketing layout is Server Component (SEO), App layout is Client Component (providers). Root layout owns `<html>/<body>` only.
+- **HUD component reuse on marketing pages**: Works well BUT components assume dark context. Must wrap in `bg-hud-bg` containers. Props vary — always read the actual component before using (HUDStatusBar requires value+label, HUDIndicator status is nominal|warning|critical|offline).
+- **Distill candidate**: Yes — "Marketing Site Addition" pattern: how to add a public marketing site to an existing auth-protected SaaS app. Covers route groups, auth prerequisites, bundle isolation, SEO metadata inheritance, and the sign-in page as sales gateway.
+
+### Business
+- Build duration: ~2 sessions (blueprint/bulletproof planning + 6-wave autonomous execution)
+- Cost: Estimated $8-14 in Claude API for the Operation execution
+- Pipeline cost: Blueprint ($3-5 estimated) + Bulletproof ($2-3) + Operation ($8-14) = ~$13-22 total
+- Deliverables: 6-section landing page, scroll-stop hero, polished sign-in, pricing page, terms, privacy, demo request form, auth hardening, SEO, security headers
+- Total codebase: 83 source files, ~28,500 lines
+- GitHub: https://github.com/saasysoft/skystratos (not yet pushed with landing page changes)
+- Next: Generate Nano Banana assets, visual QA, push to GitHub, deploy to Vercel
+- Sales motion validated: Landing → Demo Request → Credentials → Prospect explores → Scoping call → Custom deployment
