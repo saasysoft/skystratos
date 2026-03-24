@@ -46,6 +46,8 @@ const config: Config = {
         'glow-pulse': 'glow-pulse 2s ease-in-out infinite',
         'blink': 'blink 1s step-end infinite',
         'sweep': 'sweep 3s linear infinite',
+        'shake': 'shake 0.5s ease-in-out',
+        'grid-drift': 'grid-drift 20s linear infinite',
       },
       keyframes: {
         'glow-pulse': {
@@ -59,6 +61,15 @@ const config: Config = {
         'sweep': {
           '0%': { transform: 'rotate(0deg)' },
           '100%': { transform: 'rotate(360deg)' },
+        },
+        'shake': {
+          '0%, 100%': { transform: 'translateX(0)' },
+          '10%, 30%, 50%, 70%, 90%': { transform: 'translateX(-6px)' },
+          '20%, 40%, 60%, 80%': { transform: 'translateX(6px)' },
+        },
+        'grid-drift': {
+          '0%': { transform: 'translate(0, 0)' },
+          '100%': { transform: 'translate(60px, 60px)' },
         },
       },
       boxShadow: {

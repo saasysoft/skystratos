@@ -8,12 +8,13 @@ interface PINGateProps {
 }
 
 const PIN_LENGTH = 4
-const CORRECT_PIN = '8888'
 
 export default function PINGate({ onSuccess }: PINGateProps) {
   const [digits, setDigits] = useState<string[]>(Array(PIN_LENGTH).fill(''))
   const [error, setError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('ACCESS DENIED')
   const [shaking, setShaking] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
   const inputRefs = useRef<(HTMLInputElement | null)[]>([])
 
   // Auto-focus first input on mount
@@ -80,13 +81,29 @@ export default function PINGate({ onSuccess }: PINGateProps) {
     [digits],
   )
 
-  const submit = useCallback(() => {
+  const submit = useCallback(async () => {
     const pin = digits.join('')
-    if (pin.length < PIN_LENGTH) return
+    if (pin.length < PIN_LENGTH || submitting) return
 
-    if (pin === CORRECT_PIN) {
-      onSuccess()
-    } else {
+    setSubmitting(true)
+    try {
+      const res = await fetch('/api/auth/verify-pin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin }),
+      })
+
+      if (res.ok) {
+        onSuccess()
+        return
+      }
+
+      // Auth failure
+      setErrorMessage(
+        res.status === 429
+          ? 'TOO MANY ATTEMPTS'
+          : 'ACCESS DENIED'
+      )
       setShaking(true)
       setError(true)
       setTimeout(() => {
@@ -94,8 +111,19 @@ export default function PINGate({ onSuccess }: PINGateProps) {
         setDigits(Array(PIN_LENGTH).fill(''))
         inputRefs.current[0]?.focus()
       }, 500)
+    } catch {
+      setErrorMessage('CONNECTION ERROR')
+      setShaking(true)
+      setError(true)
+      setTimeout(() => {
+        setShaking(false)
+        setDigits(Array(PIN_LENGTH).fill(''))
+        inputRefs.current[0]?.focus()
+      }, 500)
+    } finally {
+      setSubmitting(false)
     }
-  }, [digits, onSuccess])
+  }, [digits, onSuccess, submitting])
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden"
@@ -104,12 +132,11 @@ export default function PINGate({ onSuccess }: PINGateProps) {
       {/* Subtle animated grid background */}
       <div className="absolute inset-0 opacity-[0.04]">
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 animate-grid-drift"
           style={{
             backgroundImage:
               'linear-gradient(rgba(0,136,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(0,136,255,0.3) 1px, transparent 1px)',
             backgroundSize: '60px 60px',
-            animation: 'gridDrift 20s linear infinite',
           }}
         />
       </div>
@@ -200,7 +227,7 @@ export default function PINGate({ onSuccess }: PINGateProps) {
               <p className="text-sm tracking-widest uppercase animate-pulse"
                 style={{ fontFamily: "'Share Tech Mono', monospace", color: '#FF3B3B' }}
               >
-                ACCESS DENIED
+                {errorMessage}
               </p>
             )}
           </div>
@@ -224,21 +251,6 @@ export default function PINGate({ onSuccess }: PINGateProps) {
         </p>
       </div>
 
-      {/* Shake animation keyframes */}
-      <style jsx global>{`
-        @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          10%, 30%, 50%, 70%, 90% { transform: translateX(-6px); }
-          20%, 40%, 60%, 80% { transform: translateX(6px); }
-        }
-        .animate-shake {
-          animation: shake 0.5s ease-in-out;
-        }
-        @keyframes gridDrift {
-          0% { transform: translate(0, 0); }
-          100% { transform: translate(60px, 60px); }
-        }
-      `}</style>
     </div>
   )
 }

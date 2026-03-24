@@ -33,6 +33,12 @@ interface TowerRequest {
 }
 
 export async function POST(request: NextRequest) {
+  // --- Auth check ---
+  const session = request.cookies.get('skystratos-session')
+  if (!session?.value) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   try {
     // --- Validate env ---
     const apiKey = process.env.ANTHROPIC_API_KEY;

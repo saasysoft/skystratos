@@ -44,3 +44,7 @@ BUILD-SUMMARY.md
 BLUEPRINT.md
 
 .vercel
+
+# Media assets
+public/video/*.mp4
+public/video/*.webm
