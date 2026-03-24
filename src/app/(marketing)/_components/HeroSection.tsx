@@ -1,0 +1,451 @@
+'use client'
+
+import { useRef } from 'react'
+import { useScroll, useTransform, motion, useReducedMotion } from 'framer-motion'
+import type { HeroSectionProps } from '@/lib/types/landing'
+import { HUDButton } from '@/components/hud/HUDButton'
+import { HUDGauge } from '@/components/hud/HUDGauge'
+import { HUDIndicator } from '@/components/hud/HUDIndicator'
+import { HUDPanel } from '@/components/hud/HUDPanel'
+import { cn } from '@/lib/utils'
+
+// ── Cost label data ────────────────────────────────────────────────
+const COST_LABELS = [
+  { component: 'ENGINE OVERHAUL', cost: '$3.2M', x: '12%', y: '18%' },
+  { component: 'LANDING GEAR', cost: '$850K', x: '72%', y: '22%' },
+  { component: 'AVIONICS UPGRADE', cost: '$1.4M', x: '8%', y: '62%' },
+  { component: 'APU REPLACEMENT', cost: '$620K', x: '76%', y: '58%' },
+  { component: 'HYDRAULIC SYSTEM', cost: '$340K', x: '42%', y: '78%' },
+] as const
+
+// ── Desktop scroll-stop animation ──────────────────────────────────
+function ScrollStopAnimation() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end'],
+  })
+
+  // Phase 1: assembled aircraft opacity (visible 0–0.35, fade out 0.3–0.5)
+  const assembledOpacity = useTransform(scrollYProgress, [0, 0.3, 0.5], [1, 1, 0])
+  // Phase 2: exploded view (fade in 0.25–0.45)
+  const explodedOpacity = useTransform(scrollYProgress, [0.25, 0.45, 0.7, 0.85], [0, 1, 1, 0.3])
+  // Phase 3: dashboard (fade in 0.65–0.85)
+  const dashboardOpacity = useTransform(scrollYProgress, [0.65, 0.85], [0, 1])
+
+  // Cost labels stagger based on scroll progress
+  const labelBaseProgress = 0.35
+
+  return (
+    <div ref={containerRef} className="relative h-[200vh]">
+      {/* Sticky viewport pinned within scroll container */}
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
+        <div className="relative w-full max-w-5xl mx-auto aspect-[16/9]">
+
+          {/* Phase 1: Assembled aircraft placeholder */}
+          <motion.div
+            className="absolute inset-0 flex items-center justify-center"
+            style={{ opacity: assembledOpacity, willChange: 'transform, opacity' }}
+            data-video-src="/assets/aircraft-assembled.mp4"
+          >
+            {/* TODO: Replace with Nano Banana assembled asset */}
+            <div className="relative w-[80%] h-[60%] rounded-lg overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-radial from-hud-primary/10 via-hud-bg to-hud-bg" />
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    'radial-gradient(ellipse 70% 40% at 50% 50%, rgba(0,136,255,0.12) 0%, rgba(0,136,255,0.04) 40%, transparent 70%)',
+                }}
+              />
+              {/* Aircraft silhouette outline */}
+              <svg
+                viewBox="0 0 400 160"
+                className="absolute inset-0 w-full h-full"
+                fill="none"
+                stroke="rgba(0,136,255,0.25)"
+                strokeWidth="1"
+              >
+                {/* Fuselage */}
+                <ellipse cx="200" cy="80" rx="160" ry="18" />
+                {/* Wings */}
+                <line x1="160" y1="80" x2="80" y2="40" />
+                <line x1="160" y1="80" x2="80" y2="50" />
+                <line x1="80" y1="40" x2="80" y2="50" />
+                <line x1="240" y1="80" x2="320" y2="40" />
+                <line x1="240" y1="80" x2="320" y2="50" />
+                <line x1="320" y1="40" x2="320" y2="50" />
+                {/* Tail */}
+                <line x1="50" y1="80" x2="40" y2="55" />
+                <line x1="40" y1="55" x2="60" y2="55" />
+                <line x1="60" y1="55" x2="50" y2="80" />
+              </svg>
+              <span className="absolute bottom-4 left-1/2 -translate-x-1/2 font-mono text-hud-xs text-hud-text-dim uppercase tracking-widest">
+                Fleet Asset Scan Active
+              </span>
+            </div>
+          </motion.div>
+
+          {/* Phase 2: Exploded view with cost labels */}
+          <motion.div
+            className="absolute inset-0"
+            style={{ opacity: explodedOpacity, willChange: 'transform, opacity' }}
+            data-video-src="/assets/aircraft-exploded.mp4"
+          >
+            {/* TODO: Replace with Nano Banana exploded/deconstructed asset */}
+            <div className="relative w-full h-full">
+              {/* Exploded aircraft placeholder — scattered glow points */}
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    'radial-gradient(circle at 30% 35%, rgba(0,136,255,0.08) 0%, transparent 25%), radial-gradient(circle at 70% 30%, rgba(0,136,255,0.08) 0%, transparent 25%), radial-gradient(circle at 25% 65%, rgba(0,136,255,0.06) 0%, transparent 20%), radial-gradient(circle at 75% 60%, rgba(0,136,255,0.06) 0%, transparent 20%), radial-gradient(circle at 50% 80%, rgba(255,184,0,0.06) 0%, transparent 18%)',
+                }}
+              />
+
+              {/* Cost labels */}
+              {COST_LABELS.map((label, i) => {
+                const enterAt = labelBaseProgress + i * 0.06
+                return (
+                  <CostLabel
+                    key={label.component}
+                    component={label.component}
+                    cost={label.cost}
+                    x={label.x}
+                    y={label.y}
+                    scrollProgress={scrollYProgress}
+                    enterAt={enterAt}
+                  />
+                )
+              })}
+            </div>
+          </motion.div>
+
+          {/* Phase 3: Dashboard reveal */}
+          <motion.div
+            className="absolute inset-0 flex items-center justify-center"
+            style={{ opacity: dashboardOpacity, willChange: 'transform, opacity' }}
+          >
+            <div className="w-full max-w-3xl mx-auto px-4">
+              <div className="bg-hud-bg border border-hud-border/40 rounded-sm p-6 space-y-6">
+                {/* HUD instruments row */}
+                <div className="flex flex-wrap items-center justify-center gap-8">
+                  <HUDGauge
+                    value={87}
+                    max={100}
+                    label="Fleet Health"
+                    unit="%"
+                    thresholds={{ warning: 70, critical: 50 }}
+                    size={120}
+                  />
+                  <div className="space-y-3">
+                    <HUDIndicator status="nominal" label="Predictive Engine" value="ONLINE" />
+                    <HUDIndicator status="warning" label="Cost Anomalies" value="3 DETECTED" />
+                    <HUDIndicator status="nominal" label="Data Pipeline" value="STREAMING" />
+                  </div>
+                  <HUDGauge
+                    value={6.4}
+                    max={10}
+                    label="Cost Savings"
+                    unit="M/yr"
+                    thresholds={{ warning: 3, critical: 1 }}
+                    size={120}
+                  />
+                </div>
+
+                {/* Data readouts */}
+                <div className="grid grid-cols-3 gap-4">
+                  {[
+                    { label: 'MRO Events Predicted', value: '2,847' },
+                    { label: 'Cost Reduction', value: '23.4%' },
+                    { label: 'Fleet Uptime', value: '99.2%' },
+                  ].map((readout) => (
+                    <div
+                      key={readout.label}
+                      className="text-center border border-hud-border/20 rounded-sm py-3 px-2 bg-hud-surface/50"
+                    >
+                      <div className="font-mono text-metric-lg text-hud-primary">
+                        {readout.value}
+                      </div>
+                      <div className="font-mono text-hud-xs text-hud-text-dim uppercase mt-1">
+                        {readout.label}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Tagline */}
+                <p className="font-mono text-hud-primary text-2xl text-center tracking-wider">
+                  See what&apos;s breaking before it grounds your fleet
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── Cost label sub-component ───────────────────────────────────────
+interface CostLabelProps {
+  component: string
+  cost: string
+  x: string
+  y: string
+  scrollProgress: ReturnType<typeof useScroll>['scrollYProgress']
+  enterAt: number
+}
+
+function CostLabel({ component, cost, x, y, scrollProgress, enterAt }: CostLabelProps) {
+  const opacity = useTransform(
+    scrollProgress,
+    [enterAt, enterAt + 0.06, 0.75, 0.85],
+    [0, 1, 1, 0]
+  )
+  const translateY = useTransform(
+    scrollProgress,
+    [enterAt, enterAt + 0.06],
+    [12, 0]
+  )
+
+  return (
+    <motion.div
+      className="absolute pointer-events-none"
+      style={{
+        left: x,
+        top: y,
+        opacity,
+        y: translateY,
+        willChange: 'transform, opacity',
+      }}
+    >
+      {/* Connecting dot */}
+      <div className="absolute -left-1.5 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-hud-secondary/80 shadow-[0_0_8px_rgba(255,184,0,0.5)]" />
+      <div className="ml-3 border border-hud-border/40 bg-hud-bg/90 backdrop-blur-sm rounded-sm px-3 py-1.5 whitespace-nowrap">
+        <span className="font-mono text-hud-xs md:text-hud-sm text-hud-text-dim block">
+          {component}
+        </span>
+        <span className="font-mono text-hud-xs md:text-hud-sm text-hud-secondary font-bold">
+          {cost}
+        </span>
+      </div>
+    </motion.div>
+  )
+}
+
+// ── Mobile cost card strip ─────────────────────────────────────────
+function MobileCostStrip() {
+  return (
+    <div className="w-full overflow-x-auto scrollbar-hide py-4 -mx-4 px-4">
+      <div className="flex gap-3 w-max">
+        {COST_LABELS.map((label) => (
+          <HUDPanel key={label.component} variant="secondary" className="min-w-[160px]">
+            <div className="text-center">
+              <div className="font-mono text-hud-xs text-hud-text-dim uppercase">
+                {label.component}
+              </div>
+              <div className="font-mono text-hud-sm text-hud-secondary font-bold mt-1">
+                {label.cost}
+              </div>
+            </div>
+          </HUDPanel>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ── Mobile static hero ─────────────────────────────────────────────
+function MobileStaticHero() {
+  return (
+    <div className="md:hidden space-y-6 px-4">
+      {/* Static aircraft placeholder */}
+      <div className="relative w-full aspect-[16/10] rounded-sm overflow-hidden border border-hud-border/20">
+        {/* TODO: Replace with Nano Banana assembled asset (static) */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(0,136,255,0.12) 0%, rgba(0,136,255,0.03) 50%, transparent 80%)',
+          }}
+        />
+        <svg
+          viewBox="0 0 400 160"
+          className="absolute inset-0 w-full h-full p-6"
+          fill="none"
+          stroke="rgba(0,136,255,0.3)"
+          strokeWidth="1"
+        >
+          <ellipse cx="200" cy="80" rx="160" ry="18" />
+          <line x1="160" y1="80" x2="80" y2="40" />
+          <line x1="160" y1="80" x2="80" y2="50" />
+          <line x1="80" y1="40" x2="80" y2="50" />
+          <line x1="240" y1="80" x2="320" y2="40" />
+          <line x1="240" y1="80" x2="320" y2="50" />
+          <line x1="320" y1="40" x2="320" y2="50" />
+          <line x1="50" y1="80" x2="40" y2="55" />
+          <line x1="40" y1="55" x2="60" y2="55" />
+          <line x1="60" y1="55" x2="50" y2="80" />
+        </svg>
+        <span className="absolute bottom-3 left-1/2 -translate-x-1/2 font-mono text-hud-xs text-hud-text-dim uppercase tracking-widest">
+          Fleet Asset Scan
+        </span>
+      </div>
+
+      {/* Horizontal scrollable cost cards */}
+      <MobileCostStrip />
+    </div>
+  )
+}
+
+// ── Main HeroSection component ─────────────────────────────────────
+export function HeroSection({ id, className, onCtaClick }: HeroSectionProps) {
+  const prefersReducedMotion = useReducedMotion()
+
+  return (
+    <section
+      id={id}
+      className={cn('bg-hud-bg text-hud-text-primary', className)}
+      aria-label="SkyStratos hero — fleet intelligence platform overview"
+    >
+      {/* Above the fold — always visible */}
+      <div className="min-h-screen flex flex-col items-center justify-center px-4 text-center">
+        <h1 className="font-mono text-4xl md:text-6xl text-hud-primary tracking-wider max-w-4xl">
+          Your Fleet&apos;s Hidden Costs — Made Visible
+        </h1>
+
+        <p className="font-mono text-hud-text-secondary text-lg md:text-xl max-w-2xl mt-6 leading-relaxed">
+          AI-powered fleet intelligence for airline maintenance executives who need answers, not dashboards
+        </p>
+
+        <div className="flex flex-col sm:flex-row items-center gap-4 mt-10">
+          <HUDButton
+            onClick={onCtaClick}
+            variant="primary"
+            size="lg"
+          >
+            Request Demo Access
+          </HUDButton>
+
+          <a
+            href="/sign-in"
+            className="font-mono text-hud-text-dim hover:text-hud-primary transition-colors duration-200 text-sm tracking-wider uppercase"
+            aria-label="Sign in to existing SkyStratos account"
+          >
+            Sign In
+          </a>
+        </div>
+
+        {/* Scroll hint — desktop only */}
+        <div className="hidden md:flex flex-col items-center mt-16 animate-pulse-slow">
+          <span className="font-mono text-hud-xs text-hud-text-dim uppercase mb-2">
+            Scroll to explore
+          </span>
+          <svg
+            width="20"
+            height="24"
+            viewBox="0 0 20 24"
+            fill="none"
+            className="text-hud-text-dim"
+            aria-hidden="true"
+          >
+            <rect x="1" y="1" width="18" height="22" rx="9" stroke="currentColor" strokeWidth="1.5" />
+            <circle cx="10" cy="8" r="2" fill="currentColor" className="animate-bounce" />
+          </svg>
+        </div>
+      </div>
+
+      {/* Below the fold — scroll-stop animation zone */}
+      {prefersReducedMotion ? (
+        /* Reduced motion: static layout with all phases visible */
+        <div className="px-4 pb-20">
+          <div className="max-w-3xl mx-auto space-y-8">
+            {/* Static cost breakdown */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {COST_LABELS.map((label) => (
+                <HUDPanel key={label.component} variant="secondary">
+                  <div className="text-center">
+                    <div className="font-mono text-hud-xs text-hud-text-dim uppercase">
+                      {label.component}
+                    </div>
+                    <div className="font-mono text-hud-sm text-hud-secondary font-bold mt-1">
+                      {label.cost}
+                    </div>
+                  </div>
+                </HUDPanel>
+              ))}
+            </div>
+
+            {/* Static dashboard preview */}
+            <div className="bg-hud-bg border border-hud-border/40 rounded-sm p-6 space-y-4">
+              <div className="flex flex-wrap items-center justify-center gap-6">
+                <HUDGauge
+                  value={87}
+                  max={100}
+                  label="Fleet Health"
+                  unit="%"
+                  thresholds={{ warning: 70, critical: 50 }}
+                  size={100}
+                />
+                <div className="space-y-2">
+                  <HUDIndicator status="nominal" label="Predictive Engine" value="ONLINE" />
+                  <HUDIndicator status="warning" label="Cost Anomalies" value="3 DETECTED" />
+                </div>
+              </div>
+              <p className="font-mono text-hud-primary text-xl text-center tracking-wider">
+                See what&apos;s breaking before it grounds your fleet
+              </p>
+            </div>
+
+            {/* CTA */}
+            <div className="flex justify-center">
+              <HUDButton onClick={onCtaClick} variant="primary" size="lg">
+                Request Demo
+              </HUDButton>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <>
+          {/* Desktop: scroll-driven animation */}
+          <div className="hidden md:block">
+            <ScrollStopAnimation />
+            {/* Bottom CTA after scroll animation */}
+            <div className="flex justify-center py-16">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-50px' }}
+                transition={{ duration: 0.5 }}
+                className="animate-glow-pulse"
+              >
+                <HUDButton
+                  onClick={onCtaClick}
+                  variant="primary"
+                  size="lg"
+                >
+                  Request Demo
+                </HUDButton>
+              </motion.div>
+            </div>
+          </div>
+
+          {/* Mobile: static hero with scrollable cost strip */}
+          <MobileStaticHero />
+
+          {/* Mobile bottom CTA */}
+          <div className="md:hidden flex justify-center py-12">
+            <HUDButton
+              onClick={onCtaClick}
+              variant="primary"
+              size="lg"
+            >
+              Request Demo
+            </HUDButton>
+          </div>
+        </>
+      )}
+    </section>
+  )
+}
