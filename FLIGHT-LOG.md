@@ -10,7 +10,7 @@ scaffolding: none
 Build SkyStratos — airline fleet operations intelligence platform with landing page, demo sign-in, and full dashboard. Two Operations completed: initial dashboard build (Session 1) and landing page + auth hardening (Session 2-3).
 
 ## Progress
-**Status:** 99% complete | Build done, hero assets generated, pushed to GitHub, needs Vercel deploy
+**Status:** 99% complete | Build done, deployed to Vercel, live at skystratos.robobffs.site
 
 ### Completed
 - [x] Session 1: Full dashboard build — 9 panels, Tower AI (9 tools), HUD design system, mock data, Vercel deploy
@@ -29,10 +29,10 @@ Build SkyStratos — airline fleet operations intelligence platform with landing
   - [x] Replaced SVG placeholder silhouettes with production images (desktop Phase 1, Phase 2, mobile)
   - [x] Fixed missing scrollbar on marketing pages (overflow:hidden was global, now scoped to dashboard)
   - [x] Pushed all changes to GitHub (dev branch)
+  - [x] Deployed to Vercel production (skystratos.robobffs.site)
 
 ### Remaining
 - [ ] Convert OG image from SVG placeholder to PNG (1200x630)
-- [ ] Deploy to Vercel (landing page not yet live)
 - [ ] Carol reviews copy on all landing page sections
 - [ ] Richard + Wally review pricing tier descriptions
 - [ ] Legal review on Terms of Service and Privacy Policy
@@ -64,16 +64,16 @@ Verification: `operations/skystratos-landing-page/VERIFICATION.md`
 Security: `operations/skystratos-landing-page/SECURITY-REPORT.md`
 
 ## Next Action
-1. Deploy to Vercel (landing page with hero assets)
-2. Convert OG image SVG → PNG for social sharing
-3. Team reviews: Carol (copy), Richard+Wally (pricing), Legal (ToS/Privacy)
+1. Convert OG image SVG → PNG for social sharing
+2. Team reviews: Carol (copy), Richard+Wally (pricing), Legal (ToS/Privacy)
+3. Set DEMO_PIN env var in Vercel for sign-in to work
 
 ## Context Notes
 - Source Triton repo: C:\Dev\_PROJECTS\_SAASY-LABS\SaaSy_DEV\triton\ (READ-ONLY reference)
 - Local project: C:\Dev\_PROJECTS\_SAASY-LABS\SaaSy_DEV\skystratos\
 - 83 source files, ~28,500 lines of code (57 original + 34 new from landing page Operation)
 - GitHub: https://github.com/saasysoft/skystratos (public, dev as default branch)
-- Vercel: https://skystratos.robobffs.site (404redteam scope) — needs redeploy with landing page
+- Vercel: https://skystratos.robobffs.site (404redteam scope) — LIVE with landing page + hero assets
 - Demo PIN: now server-side in DEMO_PIN env var (was hardcoded 8888, fixed in Wave 1)
 - ANTHROPIC_API_KEY in .env.local (never committed — verified clean)
 - Flight Recorder: FLIGHT-RECORDER.md (3 sessions recorded)
