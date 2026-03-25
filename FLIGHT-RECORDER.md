@@ -98,3 +98,33 @@
 - GitHub: https://github.com/saasysoft/skystratos (not yet pushed with landing page changes)
 - Next: Generate Nano Banana assets, visual QA, push to GitHub, deploy to Vercel
 - Sales motion validated: Landing → Demo Request → Credentials → Prospect explores → Scoping call → Custom deployment
+
+---
+
+## Session 4 | 2026-03-25T13:00Z | [mode: auto — Visual QA + Asset Generation]
+
+**Objective:** Generate hero assets, fix scrollbar, and push to GitHub.
+**Outcome:** Hero images generated, scrollbar fixed, all changes committed and pushed.
+
+### Technical
+- Generated 2 hero images via Imagen 4: assembled aircraft (777KB) and exploded view (1.1MB) — both 16:9, dark navy bg, cyan wireframe HUD aesthetic
+- Replaced SVG placeholder silhouettes in HeroSection.tsx with `<img>` tags for all 3 contexts (desktop Phase 1, Phase 2, mobile static)
+- Fixed critical UX bug: `overflow: hidden` on global `body` in globals.css was killing the browser scrollbar on marketing pages. Moved to `.dashboard-lock` class, applied via `useEffect` in `(app)/layout.tsx` only. Marketing pages now scroll normally, dashboard still locks.
+- Removed unused `data-video-src` attributes (were prepped for video but images work better for initial launch)
+
+### Journey
+- Resumed from Session 2-3 handoff via `/landing`
+- User asked for "sidebar to scroll" — initially built a dot navigation component, but user clarified they meant the actual browser scrollbar was missing
+- Root cause was immediately clear: global `overflow: hidden` designed for the single-screen dashboard HUD was applied to all routes
+- Quick visual QA confirmed hero images look correct and scrollbar works
+- Pushed all changes to GitHub in one commit
+
+### Patterns
+- **Global CSS vs route-scoped behavior**: When a global CSS rule (like `overflow: hidden`) is needed for one route group but harmful to another, use a body class toggled by the route layout's `useEffect` rather than trying to override in CSS. Cleaner than `!important` chains.
+- **Image generation for dark UI**: Imagen 4 produces excellent results when the prompt specifies dark background + specific lighting color (cyan). The generated assets matched the HUD design system perfectly without post-processing.
+
+### Business
+- Build duration: ~15 minutes (asset generation + scrollbar fix + commit + push)
+- Cost: ~$0.50 (2 Imagen 4 generations + minimal Claude usage)
+- GitHub: All changes pushed to dev branch
+- Next: Deploy to Vercel, OG image PNG conversion, team reviews
