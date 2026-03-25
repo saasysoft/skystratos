@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import dynamic from 'next/dynamic'
 import { AnimatePresence, LazyMotion, domAnimation, m } from 'framer-motion'
-import { useAuth } from '@/lib/auth/pin-context'
 import { BootSequence } from '@/components/auth/BootSequence'
 import BridgeShell from '@/components/layout/BridgeShell'
 import NavConsole, { type TabId } from '@/components/layout/NavConsole'
@@ -66,13 +65,7 @@ function getAlertSeverity(
   return 'nominal'
 }
 
-function hasCookie(name: string): boolean {
-  if (typeof document === 'undefined') return false
-  return document.cookie.split(';').some((c) => c.trim().startsWith(name + '='))
-}
-
 export default function DashboardPage() {
-  const { isAuthenticated } = useAuth()
   const [appState, setAppState] = useState<AppState>(() => {
     // If boot was already shown this session, skip straight to dashboard
     if (typeof window !== 'undefined') {
@@ -96,12 +89,8 @@ export default function DashboardPage() {
     setMounted(true)
   }, [])
 
-  // Redirect to sign-in if not authenticated and no session cookie
-  useEffect(() => {
-    if (mounted && !isAuthenticated && !hasCookie('skystratos-session')) {
-      window.location.href = '/sign-in'
-    }
-  }, [mounted, isAuthenticated])
+  // Auth is handled server-side by middleware.ts (cookie check)
+  // No client-side redirect needed — httpOnly cookie is invisible to JS
 
   // Glass mode toggle: Ctrl+Shift+G
   useEffect(() => {
