@@ -48,38 +48,13 @@ function ScrollStopAnimation() {
             style={{ opacity: assembledOpacity, willChange: 'transform, opacity' }}
             data-video-src="/assets/aircraft-assembled.mp4"
           >
-            {/* TODO: Replace with Nano Banana assembled asset */}
-            <div className="relative w-[80%] h-[60%] rounded-lg overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-radial from-hud-primary/10 via-hud-bg to-hud-bg" />
-              <div
-                className="absolute inset-0"
-                style={{
-                  background:
-                    'radial-gradient(ellipse 70% 40% at 50% 50%, rgba(0,136,255,0.12) 0%, rgba(0,136,255,0.04) 40%, transparent 70%)',
-                }}
+            <div className="relative w-full h-full">
+              <img
+                src="/assets/aircraft-assembled.png"
+                alt="Commercial aircraft technical scan — fleet asset overview"
+                className="w-full h-full object-contain"
+                loading="eager"
               />
-              {/* Aircraft silhouette outline */}
-              <svg
-                viewBox="0 0 400 160"
-                className="absolute inset-0 w-full h-full"
-                fill="none"
-                stroke="rgba(0,136,255,0.25)"
-                strokeWidth="1"
-              >
-                {/* Fuselage */}
-                <ellipse cx="200" cy="80" rx="160" ry="18" />
-                {/* Wings */}
-                <line x1="160" y1="80" x2="80" y2="40" />
-                <line x1="160" y1="80" x2="80" y2="50" />
-                <line x1="80" y1="40" x2="80" y2="50" />
-                <line x1="240" y1="80" x2="320" y2="40" />
-                <line x1="240" y1="80" x2="320" y2="50" />
-                <line x1="320" y1="40" x2="320" y2="50" />
-                {/* Tail */}
-                <line x1="50" y1="80" x2="40" y2="55" />
-                <line x1="40" y1="55" x2="60" y2="55" />
-                <line x1="60" y1="55" x2="50" y2="80" />
-              </svg>
               <span className="absolute bottom-4 left-1/2 -translate-x-1/2 font-mono text-hud-xs text-hud-text-dim uppercase tracking-widest">
                 Fleet Asset Scan Active
               </span>
@@ -92,15 +67,12 @@ function ScrollStopAnimation() {
             style={{ opacity: explodedOpacity, willChange: 'transform, opacity' }}
             data-video-src="/assets/aircraft-exploded.mp4"
           >
-            {/* TODO: Replace with Nano Banana exploded/deconstructed asset */}
             <div className="relative w-full h-full">
-              {/* Exploded aircraft placeholder — scattered glow points */}
-              <div
-                className="absolute inset-0"
-                style={{
-                  background:
-                    'radial-gradient(circle at 30% 35%, rgba(0,136,255,0.08) 0%, transparent 25%), radial-gradient(circle at 70% 30%, rgba(0,136,255,0.08) 0%, transparent 25%), radial-gradient(circle at 25% 65%, rgba(0,136,255,0.06) 0%, transparent 20%), radial-gradient(circle at 75% 60%, rgba(0,136,255,0.06) 0%, transparent 20%), radial-gradient(circle at 50% 80%, rgba(255,184,0,0.06) 0%, transparent 18%)',
-                }}
+              <img
+                src="/assets/aircraft-exploded.png"
+                alt="Aircraft components deconstructed — maintenance cost breakdown view"
+                className="absolute inset-0 w-full h-full object-contain"
+                loading="eager"
               />
 
               {/* Cost labels */}
@@ -260,34 +232,14 @@ function MobileCostStrip() {
 function MobileStaticHero() {
   return (
     <div className="md:hidden space-y-6 px-4">
-      {/* Static aircraft placeholder */}
+      {/* Static aircraft image */}
       <div className="relative w-full aspect-[16/10] rounded-sm overflow-hidden border border-hud-border/20">
-        {/* TODO: Replace with Nano Banana assembled asset (static) */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(0,136,255,0.12) 0%, rgba(0,136,255,0.03) 50%, transparent 80%)',
-          }}
+        <img
+          src="/assets/aircraft-assembled.png"
+          alt="Commercial aircraft technical scan"
+          className="w-full h-full object-contain"
+          loading="eager"
         />
-        <svg
-          viewBox="0 0 400 160"
-          className="absolute inset-0 w-full h-full p-6"
-          fill="none"
-          stroke="rgba(0,136,255,0.3)"
-          strokeWidth="1"
-        >
-          <ellipse cx="200" cy="80" rx="160" ry="18" />
-          <line x1="160" y1="80" x2="80" y2="40" />
-          <line x1="160" y1="80" x2="80" y2="50" />
-          <line x1="80" y1="40" x2="80" y2="50" />
-          <line x1="240" y1="80" x2="320" y2="40" />
-          <line x1="240" y1="80" x2="320" y2="50" />
-          <line x1="320" y1="40" x2="320" y2="50" />
-          <line x1="50" y1="80" x2="40" y2="55" />
-          <line x1="40" y1="55" x2="60" y2="55" />
-          <line x1="60" y1="55" x2="50" y2="80" />
-        </svg>
         <span className="absolute bottom-3 left-1/2 -translate-x-1/2 font-mono text-hud-xs text-hud-text-dim uppercase tracking-widest">
           Fleet Asset Scan
         </span>
