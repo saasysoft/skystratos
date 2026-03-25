@@ -103,28 +103,38 @@
 
 ## Session 4 | 2026-03-25T13:00Z | [mode: auto — Visual QA + Asset Generation]
 
-**Objective:** Generate hero assets, fix scrollbar, and push to GitHub.
-**Outcome:** Hero images generated, scrollbar fixed, all changes committed and pushed.
+**Objective:** Generate hero assets, fix scrollbar, deploy to Vercel, fix auth, and push to GitHub.
+**Outcome:** Full production deployment live with working sign-in flow.
 
 ### Technical
 - Generated 2 hero images via Imagen 4: assembled aircraft (777KB) and exploded view (1.1MB) — both 16:9, dark navy bg, cyan wireframe HUD aesthetic
 - Replaced SVG placeholder silhouettes in HeroSection.tsx with `<img>` tags for all 3 contexts (desktop Phase 1, Phase 2, mobile static)
 - Fixed critical UX bug: `overflow: hidden` on global `body` in globals.css was killing the browser scrollbar on marketing pages. Moved to `.dashboard-lock` class, applied via `useEffect` in `(app)/layout.tsx` only. Marketing pages now scroll normally, dashboard still locks.
 - Removed unused `data-video-src` attributes (were prepped for video but images work better for initial launch)
+- Set `DEMO_PIN=8888` env var in Vercel production, deployed multiple times (Vercel API had socket hangups, eventually resolved)
+- **Critical auth bug found and fixed**: Dashboard page had client-side auth check (`hasCookie('skystratos-session')`) that always returned `false` because the session cookie is `httpOnly` — invisible to `document.cookie`. This caused an infinite redirect loop between `/sign-in` and `/dashboard`. Fix: removed client-side auth redirect entirely; server-side middleware already handles protection.
+- Ran network monitor investigation (built `netmon.py` utility) after user and teammate both got Google CAPTCHA — confirmed no rogue processes, cause was GoogleDriveFS polling + uBlock Origin fingerprint
 
 ### Journey
 - Resumed from Session 2-3 handoff via `/landing`
 - User asked for "sidebar to scroll" — initially built a dot navigation component, but user clarified they meant the actual browser scrollbar was missing
 - Root cause was immediately clear: global `overflow: hidden` designed for the single-screen dashboard HUD was applied to all routes
 - Quick visual QA confirmed hero images look correct and scrollbar works
-- Pushed all changes to GitHub in one commit
+- Deployed to Vercel — hit socket hangups twice, third attempt succeeded
+- Sign-in with PIN `8888` returned "ACCESS DENIED" — discovered `DEMO_PIN` env var wasn't in the build that was serving. Re-set env var cleanly, redeployed.
+- After env var fix, sign-in caused infinite redirect loop. Debugged to the `hasCookie()` function failing on httpOnly cookies. Removed client-side auth check entirely — middleware is the single source of truth.
+- Side investigation: user and CA-based teammate both got Google CAPTCHA simultaneously. Built network monitoring utility, confirmed no malicious processes — just GoogleDriveFS (5 persistent connections), Chrome push notifications, and uBlock Origin fingerprinting.
 
 ### Patterns
 - **Global CSS vs route-scoped behavior**: When a global CSS rule (like `overflow: hidden`) is needed for one route group but harmful to another, use a body class toggled by the route layout's `useEffect` rather than trying to override in CSS. Cleaner than `!important` chains.
 - **Image generation for dark UI**: Imagen 4 produces excellent results when the prompt specifies dark background + specific lighting color (cyan). The generated assets matched the HUD design system perfectly without post-processing.
+- **httpOnly cookies are invisible to client JS**: `document.cookie` cannot read httpOnly cookies. Any client-side auth check using `document.cookie` will always fail for httpOnly sessions. When using httpOnly cookies, auth must be server-side only (middleware). Never duplicate auth checks client-side — it creates impossible-to-debug redirect loops.
+- **Distill candidate**: Yes — "httpOnly Cookie Auth" pattern: when migrating from client-side auth (sessionStorage) to server-side (httpOnly cookie + middleware), you must remove ALL client-side auth checks. The old and new auth mechanisms are fundamentally incompatible.
 
 ### Business
-- Build duration: ~15 minutes (asset generation + scrollbar fix + commit + push)
-- Cost: ~$0.50 (2 Imagen 4 generations + minimal Claude usage)
-- GitHub: All changes pushed to dev branch
-- Next: Deploy to Vercel, OG image PNG conversion, team reviews
+- Build duration: ~2 hours (including network investigation tangent and Vercel deployment issues)
+- Cost: ~$2-3 (Imagen 4 generations + multiple deploys + security investigation)
+- GitHub: All changes pushed to dev branch (4 commits)
+- Vercel: Production live at skystratos.robobffs.site with working auth
+- Utility created: `C:\Dev\_CLAUDE-RESOURCES\utilities\network-monitor\netmon.py` — reusable network connection monitor
+- Next: OG image PNG conversion, team reviews, Tower AI live test

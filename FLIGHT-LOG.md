@@ -1,6 +1,6 @@
 ---
 project: skystratos
-timestamp: 2026-03-25T13:00:00Z
+timestamp: 2026-03-26T01:30:00Z
 scaffolding: none
 ---
 
@@ -30,6 +30,9 @@ Build SkyStratos — airline fleet operations intelligence platform with landing
   - [x] Fixed missing scrollbar on marketing pages (overflow:hidden was global, now scoped to dashboard)
   - [x] Pushed all changes to GitHub (dev branch)
   - [x] Deployed to Vercel production (skystratos.robobffs.site)
+  - [x] Set DEMO_PIN env var in Vercel production
+  - [x] Fixed auth redirect loop — removed client-side auth check (httpOnly cookie invisible to JS, middleware handles it)
+  - [x] Sign-in → Dashboard flow verified working on production
 
 ### Remaining
 - [ ] Convert OG image from SVG placeholder to PNG (1200x630)
@@ -66,15 +69,15 @@ Security: `operations/skystratos-landing-page/SECURITY-REPORT.md`
 ## Next Action
 1. Convert OG image SVG → PNG for social sharing
 2. Team reviews: Carol (copy), Richard+Wally (pricing), Legal (ToS/Privacy)
-3. Set DEMO_PIN env var in Vercel for sign-in to work
+3. Test Tower AI live chat end-to-end on production
 
 ## Context Notes
 - Source Triton repo: C:\Dev\_PROJECTS\_SAASY-LABS\SaaSy_DEV\triton\ (READ-ONLY reference)
 - Local project: C:\Dev\_PROJECTS\_SAASY-LABS\SaaSy_DEV\skystratos\
 - 83 source files, ~28,500 lines of code (57 original + 34 new from landing page Operation)
 - GitHub: https://github.com/saasysoft/skystratos (public, dev as default branch)
-- Vercel: https://skystratos.robobffs.site (404redteam scope) — LIVE with landing page + hero assets
+- Vercel: https://skystratos.robobffs.site (404redteam scope) — LIVE, sign-in working with DEMO_PIN
 - Demo PIN: now server-side in DEMO_PIN env var (was hardcoded 8888, fixed in Wave 1)
 - ANTHROPIC_API_KEY in .env.local (never committed — verified clean)
-- Flight Recorder: FLIGHT-RECORDER.md (3 sessions recorded)
+- Flight Recorder: FLIGHT-RECORDER.md (4 sessions recorded)
 - The `robobffs.site` domain is managed under 404redteam Vercel scope
