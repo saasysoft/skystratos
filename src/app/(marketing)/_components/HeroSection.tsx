@@ -21,7 +21,15 @@ const COST_LABELS = [
 ] as const
 
 // ── Desktop scroll-stop animation ──────────────────────────────────
-function ScrollStopAnimation() {
+interface AnimationStrings {
+  fleetHealth: string; costSavings: string; predictiveEngine: string;
+  online: string; costAnomalies: string; detected3: string;
+  dataPipeline: string; streaming: string; mroEvents: string;
+  costReduction: string; fleetUptime: string; tagline: string;
+  scanActive: string; scanMobile: string;
+}
+
+function ScrollStopAnimation({ t }: { t: AnimationStrings }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -58,7 +66,7 @@ function ScrollStopAnimation() {
                 loading="eager"
               />
               <span className="absolute bottom-4 left-1/2 -translate-x-1/2 font-mono text-hud-xs text-hud-text-dim uppercase tracking-widest">
-                Fleet Asset Scan Active
+                {t.scanActive}
               </span>
             </div>
           </motion.div>
@@ -107,20 +115,20 @@ function ScrollStopAnimation() {
                   <HUDGauge
                     value={87}
                     max={100}
-                    label="Fleet Health"
+                    label={t.fleetHealth}
                     unit="%"
                     thresholds={{ warning: 70, critical: 50 }}
                     size={120}
                   />
                   <div className="space-y-3">
-                    <HUDIndicator status="nominal" label="Predictive Engine" value="ONLINE" />
-                    <HUDIndicator status="warning" label="Cost Anomalies" value="3 DETECTED" />
-                    <HUDIndicator status="nominal" label="Data Pipeline" value="STREAMING" />
+                    <HUDIndicator status="nominal" label={t.predictiveEngine} value={t.online} />
+                    <HUDIndicator status="warning" label={t.costAnomalies} value={t.detected3} />
+                    <HUDIndicator status="nominal" label={t.dataPipeline} value={t.streaming} />
                   </div>
                   <HUDGauge
                     value={6.4}
                     max={10}
-                    label="Cost Savings"
+                    label={t.costSavings}
                     unit="M/yr"
                     thresholds={{ warning: 3, critical: 1 }}
                     size={120}
@@ -130,9 +138,9 @@ function ScrollStopAnimation() {
                 {/* Data readouts */}
                 <div className="grid grid-cols-3 gap-4">
                   {[
-                    { label: 'MRO Events Predicted', value: '2,847' },
-                    { label: 'Cost Reduction', value: '23.4%' },
-                    { label: 'Fleet Uptime', value: '99.2%' },
+                    { label: t.mroEvents, value: '2,847' },
+                    { label: t.costReduction, value: '23.4%' },
+                    { label: t.fleetUptime, value: '99.2%' },
                   ].map((readout) => (
                     <div
                       key={readout.label}
@@ -150,7 +158,7 @@ function ScrollStopAnimation() {
 
                 {/* Tagline */}
                 <p className="font-mono text-hud-primary text-2xl text-center tracking-wider">
-                  See what&apos;s breaking before it grounds your fleet
+                  {t.tagline}
                 </p>
               </div>
             </div>
@@ -243,7 +251,7 @@ function MobileStaticHero() {
           loading="eager"
         />
         <span className="absolute bottom-3 left-1/2 -translate-x-1/2 font-mono text-hud-xs text-hud-text-dim uppercase tracking-widest">
-          Fleet Asset Scan
+          {/* Mobile static — will be translated via parent */}
         </span>
       </div>
 
@@ -258,6 +266,7 @@ export function HeroSection({ id, className, onCtaClick }: HeroSectionProps) {
   const prefersReducedMotion = useReducedMotion()
   const { locale } = useTranslation()
   const s = getLandingStrings(locale)
+  const a = s.heroAnimation
 
   return (
     <section
@@ -339,18 +348,18 @@ export function HeroSection({ id, className, onCtaClick }: HeroSectionProps) {
                 <HUDGauge
                   value={87}
                   max={100}
-                  label="Fleet Health"
+                  label={a.fleetHealth}
                   unit="%"
                   thresholds={{ warning: 70, critical: 50 }}
                   size={100}
                 />
                 <div className="space-y-2">
-                  <HUDIndicator status="nominal" label="Predictive Engine" value="ONLINE" />
-                  <HUDIndicator status="warning" label="Cost Anomalies" value="3 DETECTED" />
+                  <HUDIndicator status="nominal" label={a.predictiveEngine} value={a.online} />
+                  <HUDIndicator status="warning" label={a.costAnomalies} value={a.detected3} />
                 </div>
               </div>
               <p className="font-mono text-hud-primary text-xl text-center tracking-wider">
-                See what&apos;s breaking before it grounds your fleet
+                {a.tagline}
               </p>
             </div>
 
@@ -366,7 +375,7 @@ export function HeroSection({ id, className, onCtaClick }: HeroSectionProps) {
         <>
           {/* Desktop: scroll-driven animation */}
           <div className="hidden md:block">
-            <ScrollStopAnimation />
+            <ScrollStopAnimation t={a} />
             {/* Bottom CTA after scroll animation */}
             <div className="flex justify-center py-16">
               <motion.div
