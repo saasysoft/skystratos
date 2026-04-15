@@ -138,3 +138,39 @@
 - Vercel: Production live at skystratos.robobffs.site with working auth
 - Utility created: `C:\Dev\_CLAUDE-RESOURCES\utilities\network-monitor\netmon.py` — reusable network connection monitor
 - Next: OG image PNG conversion, team reviews, Tower AI live test
+
+---
+
+## Session 5 | 2026-04-15T00:00Z | [mode: auto — Portfolio Polish]
+
+**Objective:** Polish SkyStratos for display as portfolio piece on robobffs.com — remove auth gate, update CTAs from demo-request to meeting-scheduling flow.
+**Outcome:** All CTAs updated, auth bypassed, 8 files changed, deployed to production.
+
+### Technical
+- **Middleware bypass**: Changed `middleware.ts` from session cookie check + redirect to pass-through (`NextResponse.next()`). Dashboard now accessible without authentication.
+- **CTA rename sweep** across 8 files:
+  - `LandingNav.tsx`: "Sign In" → "Demo" (→ /dashboard), "REQUEST DEMO" → "SCHEDULE MEETING" (desktop + mobile)
+  - `HeroSection.tsx`: "Request Demo Access" → "Schedule Meeting", "Sign In" → "Demo" (→ /dashboard), 3 more "Request Demo" → "Schedule Meeting"
+  - `DemoRequestForm.tsx`: heading "Request Demo Access" → "Schedule a Meeting", submit "REQUEST DEMO ACCESS" → "SCHEDULE MEETING"
+  - `LandingFooter.tsx`: "Request Demo" → "Schedule Meeting", tagline "Authorized Personnel Only" → "Fleet Intelligence Platform"
+  - `landing-data.ts`: all 3 pricing tier `ctaLabel` "Contact Sales" → "Schedule Meeting"
+  - `pricing/page.tsx`: bottom CTA "Schedule a Scoping Call" → "Schedule Meeting"
+  - `SignInClient.tsx`: "Request Demo Access" → "Schedule a Meeting"
+- Build passes clean (0 TypeScript errors, all 14 pages static/dynamic)
+- Twenty.com booking repo searched across 9 GitHub orgs — not found. Form still functional as lead capture placeholder.
+
+### Journey
+- User wants SkyStratos as a robobffs.com portfolio showcase piece
+- Three-part request: (1) remove auth gate, (2) rename Sign In → Demo, (3) rename Request Demo → Schedule Meeting
+- User mentioned a GitHub repo connecting "Book a Call" to Twenty.com account but couldn't remember which org — exhaustive search across all 9 orgs found nothing
+- All changes were straightforward text/link swaps — no architectural changes needed
+
+### Patterns
+- **Portfolio conversion pattern**: When converting a gated SaaS demo to a public portfolio piece, the key changes are: (1) bypass auth middleware, (2) repoint sign-in links to dashboard, (3) update CTAs from lead-capture to meeting-scheduling language. Keep the auth infrastructure intact (sign-in page, PIN gate, API routes) — don't delete it, just bypass it. Makes it easy to re-enable later.
+- **CTA text sweep**: When renaming a CTA across a marketing site, search for ALL variations (capitalized, sentence case, button text, link text, heading text, aria labels) — they're always in more places than you think. This one had 11 instances across 8 files.
+
+### Business
+- Build duration: ~15 minutes (text changes + build verification)
+- Purpose: Portfolio piece on robobffs.com company website
+- Impact: Site now fully open — anyone can click "Demo" and see the full dashboard without credentials
+- Pending: Twenty.com booking integration for "Schedule Meeting" flow (repo needs to be located)

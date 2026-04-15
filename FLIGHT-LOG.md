@@ -10,7 +10,7 @@ scaffolding: none
 Build SkyStratos — airline fleet operations intelligence platform with landing page, demo sign-in, and full dashboard. Two Operations completed: initial dashboard build (Session 1) and landing page + auth hardening (Session 2-3).
 
 ## Progress
-**Status:** 99% complete | Build done, deployed to Vercel, live at skystratos.robobffs.site
+**Status:** Portfolio-ready | Auth bypassed, CTAs updated, deployed to Vercel at skystratos.robobffs.site
 
 ### Completed
 - [x] Session 1: Full dashboard build — 9 panels, Tower AI (9 tools), HUD design system, mock data, Vercel deploy
@@ -33,32 +33,43 @@ Build SkyStratos — airline fleet operations intelligence platform with landing
   - [x] Set DEMO_PIN env var in Vercel production
   - [x] Fixed auth redirect loop — removed client-side auth check (httpOnly cookie invisible to JS, middleware handles it)
   - [x] Sign-in → Dashboard flow verified working on production
+- [x] Session 5: Portfolio polish for robobffs.com showcase
+  - [x] Removed PIN auth protection — middleware now passes all traffic through to /dashboard
+  - [x] "Sign In" → "Demo" across nav (desktop + mobile) and hero — links directly to /dashboard
+  - [x] "Request Demo" / "REQUEST DEMO" → "Schedule Meeting" across nav, hero (4 instances), pricing, footer
+  - [x] "Contact Sales" → "Schedule Meeting" on all 3 pricing tier CTAs
+  - [x] DemoRequestForm heading → "Schedule a Meeting", submit button → "SCHEDULE MEETING"
+  - [x] Footer tagline "Authorized Personnel Only" → "Fleet Intelligence Platform"
+  - [x] SignInClient updated: "Request Demo Access" → "Schedule a Meeting"
+  - [x] Pricing page bottom CTA updated
+  - [x] 8 files changed, build passes clean
 
 ### Remaining
 - [ ] Convert OG image from SVG placeholder to PNG (1200x630)
+- [ ] Integrate Twenty.com booking widget into Schedule Meeting flow (repo not found — check GitHub orgs)
 - [ ] Carol reviews copy on all landing page sections
 - [ ] Richard + Wally review pricing tier descriptions
 - [ ] Legal review on Terms of Service and Privacy Policy
-- [ ] Test Tower AI live chat end-to-end with new auth flow
+- [ ] Test Tower AI live chat end-to-end
 - [ ] Consider upgrading Next.js 14.2.21 (security advisory)
-- [ ] Production hardening: persistent rate limiting (Redis/KV), timing-safe PIN comparison, CORS headers
 
 ## Key Decisions
 - **Architecture:** Same app, route groups — (marketing)/ for public, (app)/ for protected
-- **Auth:** Server-side PIN verification + httpOnly cookie + middleware (no more client-side PIN)
-- **Sign-in:** /sign-in under (marketing)/ — public page wrapping PINGate
-- **Pricing:** Enterprise "Contact Sales" on all 3 tiers — custom per airline
+- **Auth:** Bypassed for portfolio display — middleware passes all traffic through (was PIN + httpOnly cookie)
+- **Sign-in:** /sign-in still exists as route but not linked from nav; "Demo" links straight to /dashboard
+- **Pricing:** "Schedule Meeting" on all 3 tiers (was "Contact Sales")
 - **Scope cuts:** No testimonials, ROI calculator, or MapLibre embed on landing page
 - **Hero:** Scroll-stop with Framer Motion useScroll — video OR image crossfade fallback
 - **Form backend:** /api/leads → Zod validation → Slack webhook (with honeypot, CSRF, sanitization)
 - **Bundle:** Landing page 47.8KB (budget was 150KB)
-- **Sales motion:** Landing → Demo Request → Credentials issued → Prospect explores demo → Scoping call
+- **Sales motion:** Landing → Schedule Meeting OR Demo (open access) → Scoping call
+- **Portfolio use:** Site displayed on robobffs.com as showcase piece
 
 ## Blockers
 None.
 
 ## Uncommitted Changes
-None — all changes committed and pushed to dev branch.
+None — all changes committed and pushed.
 
 ## Scaffolding State
 Operation: `operations/skystratos-landing-page/OPERATION.md` (completed)
@@ -67,17 +78,17 @@ Verification: `operations/skystratos-landing-page/VERIFICATION.md`
 Security: `operations/skystratos-landing-page/SECURITY-REPORT.md`
 
 ## Next Action
-1. Convert OG image SVG → PNG for social sharing
-2. Team reviews: Carol (copy), Richard+Wally (pricing), Legal (ToS/Privacy)
-3. Test Tower AI live chat end-to-end on production
+1. Find & integrate Twenty.com booking repo for Schedule Meeting flow
+2. Convert OG image SVG → PNG for social sharing
+3. Team reviews: Carol (copy), Richard+Wally (pricing), Legal (ToS/Privacy)
 
 ## Context Notes
 - Source Triton repo: C:\Dev\_PROJECTS\_SAASY-LABS\SaaSy_DEV\triton\ (READ-ONLY reference)
 - Local project: C:\Dev\_PROJECTS\_SAASY-LABS\SaaSy_DEV\skystratos\
 - 83 source files, ~28,500 lines of code (57 original + 34 new from landing page Operation)
 - GitHub: https://github.com/saasysoft/skystratos (public, dev as default branch)
-- Vercel: https://skystratos.robobffs.site (404redteam scope) — LIVE, sign-in working with DEMO_PIN
-- Demo PIN: now server-side in DEMO_PIN env var (was hardcoded 8888, fixed in Wave 1)
+- Vercel: https://skystratos.robobffs.site (404redteam scope) — LIVE, auth bypassed for portfolio
 - ANTHROPIC_API_KEY in .env.local (never committed — verified clean)
-- Flight Recorder: FLIGHT-RECORDER.md (4 sessions recorded)
+- Flight Recorder: FLIGHT-RECORDER.md (5 sessions recorded)
 - The `robobffs.site` domain is managed under 404redteam Vercel scope
+- Twenty.com booking repo: searched 9 GitHub orgs, not found — needs manual locate

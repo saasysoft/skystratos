@@ -73,7 +73,7 @@ export default function LandingFooter({ className }: LandingFooterProps) {
                 href="#demo-request"
                 className="text-hud-primary hover:underline"
               >
-                Request Demo
+                Schedule Meeting
               </Link>
             </p>
 
@@ -83,7 +83,7 @@ export default function LandingFooter({ className }: LandingFooterProps) {
                 SKYSTRATOS
               </span>
               <span className="font-mono text-[10px] uppercase tracking-widest text-hud-text-dim">
-                Authorized Personnel Only
+                Fleet Intelligence Platform
               </span>
             </div>
           </div>

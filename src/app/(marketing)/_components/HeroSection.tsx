@@ -277,15 +277,15 @@ export function HeroSection({ id, className, onCtaClick }: HeroSectionProps) {
             variant="primary"
             size="lg"
           >
-            Request Demo Access
+            Schedule Meeting
           </HUDButton>
 
           <a
-            href="/sign-in"
+            href="/dashboard"
             className="font-mono text-hud-text-dim hover:text-hud-primary transition-colors duration-200 text-sm tracking-wider uppercase"
-            aria-label="Sign in to existing SkyStratos account"
+            aria-label="Try the SkyStratos demo"
           >
-            Sign In
+            Demo
           </a>
         </div>
 
@@ -353,7 +353,7 @@ export function HeroSection({ id, className, onCtaClick }: HeroSectionProps) {
             {/* CTA */}
             <div className="flex justify-center">
               <HUDButton onClick={onCtaClick} variant="primary" size="lg">
-                Request Demo
+                Schedule Meeting
               </HUDButton>
             </div>
           </div>
@@ -377,7 +377,7 @@ export function HeroSection({ id, className, onCtaClick }: HeroSectionProps) {
                   variant="primary"
                   size="lg"
                 >
-                  Request Demo
+                  Schedule Meeting
                 </HUDButton>
               </motion.div>
             </div>
@@ -393,7 +393,7 @@ export function HeroSection({ id, className, onCtaClick }: HeroSectionProps) {
               variant="primary"
               size="lg"
             >
-              Request Demo
+              Schedule Meeting
             </HUDButton>
           </div>
         </>

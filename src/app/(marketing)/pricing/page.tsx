@@ -223,7 +223,7 @@ export default function PricingPage() {
             href="/#demo-request"
             className="inline-block font-mono text-sm tracking-wider bg-hud-primary text-hud-bg px-8 py-3 rounded border border-hud-primary hover:bg-hud-primary/90 transition-colors"
           >
-            Schedule a Scoping Call
+            Schedule Meeting
           </Link>
         </div>
       </section>

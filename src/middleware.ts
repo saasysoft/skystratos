@@ -1,13 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-export function middleware(request: NextRequest) {
-  const session = request.cookies.get('skystratos-session')
-
-  if (!session?.value) {
-    const signInUrl = new URL('/sign-in', request.url)
-    return NextResponse.redirect(signInUrl)
-  }
-
+export function middleware(_request: NextRequest) {
+  // Auth bypass — open demo for portfolio display
   return NextResponse.next()
 }
 

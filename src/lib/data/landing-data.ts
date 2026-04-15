@@ -129,7 +129,7 @@ export const PRICING_TIERS: PricingTier[] = [
       { text: 'Tower AI Co-Pilot', included: false },
     ],
     highlighted: false,
-    ctaLabel: 'Contact Sales',
+    ctaLabel: 'Schedule Meeting',
   },
   {
     id: 'intel',
@@ -148,7 +148,7 @@ export const PRICING_TIERS: PricingTier[] = [
       { text: 'Custom integrations & API', included: false },
     ],
     highlighted: true,
-    ctaLabel: 'Contact Sales',
+    ctaLabel: 'Schedule Meeting',
   },
   {
     id: 'command',
@@ -167,6 +167,6 @@ export const PRICING_TIERS: PricingTier[] = [
       { text: '24/7 phone & chat support', included: true },
     ],
     highlighted: false,
-    ctaLabel: 'Contact Sales',
+    ctaLabel: 'Schedule Meeting',
   },
 ];

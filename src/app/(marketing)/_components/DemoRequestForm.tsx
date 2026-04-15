@@ -207,10 +207,10 @@ export function DemoRequestForm({ preselectedTier }: DemoRequestFormProps) {
         {/* Section header */}
         <div className="text-center mb-12">
           <h2 className="font-mono text-3xl md:text-4xl font-bold text-hud-text-primary tracking-wider">
-            Request Demo Access
+            Schedule a Meeting
           </h2>
           <p className="mt-4 font-sans text-lg text-hud-text-secondary max-w-xl mx-auto">
-            Get hands-on with SkyStratos. Our team will set up your demo environment within 24 hours.
+            Book time with our team to see SkyStratos in action and discuss your fleet operations.
           </p>
         </div>
 
@@ -354,7 +354,7 @@ export function DemoRequestForm({ preselectedTier }: DemoRequestFormProps) {
               disabled={status === 'submitting'}
               className="w-full relative inline-flex items-center justify-center font-mono uppercase tracking-wider border rounded-sm select-none cursor-pointer transition-all duration-200 ease-out shadow-[0_2px_4px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.04)] min-h-[48px] px-6 py-3 text-[13px] bg-gradient-to-b from-[#0A2A3A] to-[#0C1218] border-hud-primary/30 text-hud-primary hover:border-hud-primary/70 hover:shadow-[0_0_12px_rgba(0,136,255,0.25)] active:translate-y-[1px] active:shadow-[0_0_4px_rgba(0,136,255,0.15)] disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none"
             >
-              {status === 'submitting' ? 'TRANSMITTING...' : 'REQUEST DEMO ACCESS'}
+              {status === 'submitting' ? 'TRANSMITTING...' : 'SCHEDULE MEETING'}
             </button>
           </div>
 

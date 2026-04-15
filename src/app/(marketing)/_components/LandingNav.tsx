@@ -114,14 +114,14 @@ export default function LandingNav({
             ))}
 
             <Link
-              href="/sign-in"
+              href="/dashboard"
               className="font-mono text-hud-xs uppercase tracking-widest text-hud-text-dim hover:text-hud-primary transition-colors"
             >
-              Sign In
+              Demo
             </Link>
 
             <HUDButton onClick={scrollToDemo} variant="primary" size="sm">
-              REQUEST DEMO
+              SCHEDULE MEETING
             </HUDButton>
           </div>
 
@@ -169,15 +169,15 @@ export default function LandingNav({
             ))}
 
             <Link
-              href="/sign-in"
+              href="/dashboard"
               onClick={() => setMobileOpen(false)}
               className="font-mono text-lg uppercase tracking-widest text-hud-text-dim hover:text-hud-primary transition-colors"
             >
-              Sign In
+              Demo
             </Link>
 
             <HUDButton onClick={scrollToDemo} variant="primary" size="md">
-              REQUEST DEMO
+              SCHEDULE MEETING
             </HUDButton>
           </div>
         </div>

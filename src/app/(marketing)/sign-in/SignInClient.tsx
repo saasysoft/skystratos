@@ -62,14 +62,14 @@ export default function SignInClient() {
           className="text-xs tracking-wide"
           style={{ color: '#4A6A7F' }}
         >
-          Don&apos;t have access yet?
+          Want to learn more?
         </p>
         <a
           href="/#demo-request"
           className="text-xs uppercase tracking-[0.2em] transition-colors duration-200 hover:underline"
           style={{ color: '#0088FF' }}
         >
-          Request Demo Access
+          Schedule a Meeting
         </a>
       </div>
     </>
