@@ -150,6 +150,43 @@ const mxDescMap: Record<string, string> = {
   'Scheduled A-Check per Airbus maintenance planning document.': '依空中巴士維修計劃文件排定 A 檢。',
 };
 
+// ── AOG root causes (extracted from alert titles) ───────────────────
+
+const aogCauseMap: Record<string, string> = {
+  'Engine Bleed Valve Failure': '引擎引氣閥故障',
+  'Flight Management Computer Failure': '飛行管理電腦故障',
+  'Landing gear proximity sensor failure': '起落架接近感測器故障',
+  'Engine #1 oil leak - accessory gearbox seal': '引擎 #1 漏油 — 附件齒輪箱密封',
+  'APU starter motor seized': 'APU 啟動馬達卡死',
+  'Hydraulic system A pump failure': '液壓系統 A 泵故障',
+  'FMC software fault - reloading required': 'FMC 軟體故障 — 需重新載入',
+  'Engine bleed air 5th stage check valve crack': '引擎引氣第 5 級止回閥裂紋',
+  'Weather radar antenna drive failure': '氣象雷達天線驅動故障',
+  'Emergency bleed valve troubleshooting in': '緊急引氣閥排障中',
+};
+
+// ── Inventory descriptions (Out of Stock / Low Stock items) ─────────
+
+const inventoryDescMap: Record<string, string> = {
+  'CFM56-7B engine bleed valve assembly': 'CFM56-7B 引擎引氣閥總成',
+  'Hydraulic quantity transmitter (B737)': '液壓油量變送器（B737）',
+  'Main landing gear shock strut (B737) overhauled': '主起落架減震支柱（B737）翻修品',
+  'Flight Director Computer #1 (B737)': '飛行指引電腦 #1（B737）',
+  'Nose wheel steering position sensor': '鼻輪轉向位置感測器',
+  'Hydraulic pump assembly system A (B737 MAX)': '液壓泵總成系統 A（B737 MAX）',
+  'Flight Management Computer (A320 family)': '飛行管理電腦（A320 系列）',
+  'Radio altimeter transceiver #2': '無線電高度計收發器 #2',
+  'LEAP-1A combustion chamber liner segment': 'LEAP-1A 燃燒室內襯段',
+  'Spoiler actuator assembly (A320)': '擾流板作動器總成（A320）',
+  'Generator control unit right (B787)': '右發電機控制單元（B787）',
+  'GE90-115B combustion liner panels': 'GE90-115B 燃燒室內襯板',
+  'LEAP-1B fan blade individual': 'LEAP-1B 風扇葉片單片',
+  'Hydraulic pump pressure regulator (B737 MAX)': '液壓泵壓力調節器（B737 MAX）',
+  'Inertial Reference Unit (IRU)': '慣性參考單元（IRU）',
+  'LEAP-1A fan blade individual': 'LEAP-1A 風扇葉片單片',
+  'Main landing gear strut (A320) overhauled': '主起落架支柱（A320）翻修品',
+};
+
 // ── Procurement item names ──────────────────────────────────────────
 
 const procItemMap: Record<string, string> = {
@@ -229,7 +266,7 @@ const alertTitleMap: Record<string, string> = {
 const allMaps = [
   statusMap, categoryMap, priorityMap, checkTypeMap, triggerMap,
   severityMap, locationMap, causeMap,
-  melDescMap, mxDescMap, procItemMap, alertTitleMap,
+  melDescMap, mxDescMap, aogCauseMap, inventoryDescMap, procItemMap, alertTitleMap,
 ];
 
 // Build a single flat lookup for O(1) access
