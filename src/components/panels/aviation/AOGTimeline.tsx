@@ -3,6 +3,7 @@
 import { useMemo } from 'react'
 import { cn } from '@/lib/utils'
 import { useTranslation } from '@/lib/i18n/use-translation'
+import { td } from '@/lib/i18n/data-i18n'
 import { HUDPanel } from '@/components/hud/HUDPanel'
 import { getAircraft, getAlerts, getScheduledFlights, getMaintenanceRecords } from '@/lib/data'
 import type { Aircraft, Alert } from '@/lib/data'
@@ -50,7 +51,7 @@ function formatCurrency(value: number): string {
 // ---------------------------------------------------------------------------
 
 export default function AOGTimeline() {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const allAircraft = getAircraft()
   const allAlerts = getAlerts()
   const allFlights = getScheduledFlights()
@@ -129,7 +130,7 @@ export default function AOGTimeline() {
                     </span>
                   </div>
                   <div className="font-mono text-[11px] text-hud-text-dim mt-1">
-                    {t('aogPanel.location')}<span className="text-hud-text-primary">{aog.location}</span>
+                    {t('aogPanel.location')}<span className="text-hud-text-primary">{td(aog.location, locale)}</span>
                   </div>
                 </div>
                 <div className="text-right">
@@ -146,7 +147,7 @@ export default function AOGTimeline() {
                   {t('aogPanel.rootCause')}
                 </div>
                 <div className="font-mono text-[12px] text-hud-text-primary">
-                  {aog.rootCause}
+                  {td(aog.rootCause, locale)}
                 </div>
               </div>
 
@@ -174,7 +175,7 @@ export default function AOGTimeline() {
                   <span className="uppercase tracking-wider text-[10px]">{t('aogPanel.recoveryETA')}</span>
                   {aog.maintenanceRecords.map((m) => (
                     <span key={m.id} className="text-[#0088FF]">
-                      {m.scheduledDate} ({m.description.slice(0, 40)})
+                      {m.scheduledDate} ({td(m.description, locale).slice(0, 40)})
                     </span>
                   ))}
                 </div>
@@ -217,8 +218,8 @@ export default function AOGTimeline() {
                   <td className="px-2 py-1.5 text-hud-text-dim">{event.date}</td>
                   <td className="px-2 py-1.5 text-hud-text-primary font-bold">{event.tail}</td>
                   <td className="px-2 py-1.5 text-right text-hud-warning">{event.duration}</td>
-                  <td className="px-2 py-1.5 text-hud-text-dim truncate max-w-[220px]" title={event.cause}>
-                    {event.cause}
+                  <td className="px-2 py-1.5 text-hud-text-dim truncate max-w-[220px]" title={td(event.cause, locale)}>
+                    {td(event.cause, locale)}
                   </td>
                   <td className="px-2 py-1.5 text-right text-hud-critical">
                     {formatCurrency(event.totalCost)}

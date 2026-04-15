@@ -3,6 +3,7 @@
 import { useMemo } from 'react'
 import { cn } from '@/lib/utils'
 import { useTranslation } from '@/lib/i18n/use-translation'
+import { td } from '@/lib/i18n/data-i18n'
 import { HUDPanel } from '@/components/hud/HUDPanel'
 import { HUDIndicator } from '@/components/hud/HUDIndicator'
 import { getInventoryItems } from '@/lib/data'
@@ -55,7 +56,7 @@ interface TransferRecommendation {
 // ---------------------------------------------------------------------------
 
 export default function MultiStationInventory() {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const allItems = getInventoryItems()
 
   // Compute per-station stats
@@ -163,7 +164,7 @@ export default function MultiStationInventory() {
           <HUDPanel
             key={station.location}
             variant={station.healthStatus === 'critical' ? 'alert' : station.healthStatus === 'warning' ? 'secondary' : 'primary'}
-            label={station.location}
+            label={td(station.location, locale)}
           >
             <div className="space-y-3">
               {/* Health indicator */}
@@ -244,13 +245,13 @@ export default function MultiStationInventory() {
                     key={i}
                     className="border-t border-hud-border/20 hover:bg-hud-surface/30 transition-colors"
                   >
-                    <td className="px-2 py-1.5 text-hud-text-primary truncate max-w-[220px]" title={tr.partDescription}>
-                      {tr.partDescription.length > 45
-                        ? tr.partDescription.slice(0, 42) + '...'
-                        : tr.partDescription}
+                    <td className="px-2 py-1.5 text-hud-text-primary truncate max-w-[220px]" title={td(tr.partDescription, locale)}>
+                      {td(tr.partDescription, locale).length > 45
+                        ? td(tr.partDescription, locale).slice(0, 42) + '...'
+                        : td(tr.partDescription, locale)}
                     </td>
-                    <td className="px-2 py-1.5 text-hud-critical font-bold">{tr.neededAt}</td>
-                    <td className="px-2 py-1.5 text-hud-nominal">{tr.availableAt}</td>
+                    <td className="px-2 py-1.5 text-hud-critical font-bold">{td(tr.neededAt, locale)}</td>
+                    <td className="px-2 py-1.5 text-hud-nominal">{td(tr.availableAt, locale)}</td>
                     <td className="px-2 py-1.5 text-right text-hud-text-primary">{tr.qtyAvailable}</td>
                     <td className="px-2 py-1.5 text-right text-hud-text-dim">{tr.leadTimeDays}d</td>
                   </tr>

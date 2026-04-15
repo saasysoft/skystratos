@@ -17,6 +17,7 @@ import type {
   MaintenanceCategory,
 } from '@/lib/mock-data/types'
 import { useTranslation } from '@/lib/i18n/use-translation'
+import { td } from '@/lib/i18n/data-i18n'
 
 // ─── Color palette ───────────────────────────────────────────────────
 const CATEGORY_COLORS: Record<MaintenanceCategory, string> = {
@@ -67,7 +68,7 @@ function getA320neoIds(): Set<string> {
 
 /** Overdue alert card */
 function OverdueCard({ record }: { record: MaintenanceRecord }) {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const days = daysOverdue(record.scheduledDate)
   const isCritical = record.priority === 'Critical'
 
@@ -79,7 +80,7 @@ function OverdueCard({ record }: { record: MaintenanceRecord }) {
             {record.tailNumber}
           </p>
           <p className="font-mono text-hud-xs text-hud-text-secondary mt-1 line-clamp-2">
-            {record.description}
+            {td(record.description, locale)}
           </p>
           <p className="font-mono text-hud-xs text-hud-text-dim mt-1">
             Due {formatDate(record.scheduledDate)} &mdash;{' '}
@@ -93,12 +94,12 @@ function OverdueCard({ record }: { record: MaintenanceRecord }) {
               : 'bg-hud-warning/20 text-hud-warning animate-pulse-slow'
           }`}
         >
-          {record.priority}
+          {td(record.priority, locale)}
         </span>
       </div>
       <HUDIndicator
         status={isCritical ? 'critical' : 'warning'}
-        label={record.category}
+        label={td(record.category, locale)}
         value={`${t('maintenance.estDowntime')} ${record.downtimeHours}${t('maintenance.downtimeHours')}`}
         className="mt-2"
       />
@@ -112,7 +113,7 @@ function MaintenanceTimeline({
 }: {
   records: MaintenanceRecord[]
 }) {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const now = PINNED_NOW
   const endDate = new Date('2026-06-21') // 90 days out
   const totalDays = 90
@@ -209,7 +210,7 @@ function MaintenanceTimeline({
                     opacity: 0.85,
                     boxShadow: `0 0 6px ${color}40`,
                   }}
-                  title={`${r.description}\n${r.status} — ${r.downtimeHours}h downtime`}
+                  title={`${td(r.description, locale)}\n${td(r.status, locale)} — ${r.downtimeHours}h downtime`}
                 />
               )
             })}
@@ -228,13 +229,14 @@ function MaintenanceTimeline({
 
 /** Custom Recharts tooltip */
 function CategoryTooltip({ active, payload }: any) {
+  const { locale } = useTranslation()
   if (!active || !payload?.length) return null
   const { name, value, fill } = payload[0].payload
   return (
     <div className="bg-hud-bg/95 border border-hud-border/50 rounded px-3 py-2 shadow-hud">
       <p className="font-mono text-hud-xs text-hud-text-primary flex items-center gap-2">
         <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: fill }} />
-        {name}
+        {td(name, locale)}
       </p>
       <p className="font-mono text-hud-xs text-hud-text-dim mt-0.5">
         {value} record{value !== 1 ? 's' : ''}
@@ -246,7 +248,7 @@ function CategoryTooltip({ active, payload }: any) {
 // ─── Main Panel ──────────────────────────────────────────────────────
 
 export function MaintenanceIntelPanel() {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const allRecords = useMemo(() => getMaintenanceRecords(), [])
   const allAircraft = useMemo(() => getAircraft(), [])
   const a320neoIds = useMemo(() => getA320neoIds(), [])
@@ -412,7 +414,7 @@ export function MaintenanceIntelPanel() {
                         : 'text-hud-text-dim'
                     }`}
                   >
-                    {entry.name} ({entry.value})
+                    {td(entry.name, locale)} ({entry.value})
                   </span>
                 </div>
               ))}

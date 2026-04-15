@@ -3,6 +3,7 @@
 import { useMemo } from 'react'
 import { cn } from '@/lib/utils'
 import { useTranslation } from '@/lib/i18n/use-translation'
+import { td } from '@/lib/i18n/data-i18n'
 import { HUDPanel } from '@/components/hud/HUDPanel'
 import { getMELItems, getAircraft } from '@/lib/data'
 import type { MELItem } from '@/lib/data'
@@ -53,7 +54,7 @@ function formatCountdown(hours: number): { days: number; hrs: number; status: 'e
 // ---------------------------------------------------------------------------
 
 export default function MELTracker() {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const allMEL = getMELItems({ status: 'active' })
   const allAircraft = getAircraft()
 
@@ -186,10 +187,10 @@ export default function MELTracker() {
                           <td className="px-2 py-1.5 text-hud-text-primary">
                             ATA {item.ataChapter}
                           </td>
-                          <td className="px-2 py-1.5 text-hud-text-dim truncate max-w-[200px]" title={item.description}>
-                            {item.description.length > 60
-                              ? item.description.slice(0, 57) + '...'
-                              : item.description}
+                          <td className="px-2 py-1.5 text-hud-text-dim truncate max-w-[200px]" title={td(item.description, locale)}>
+                            {td(item.description, locale).length > 60
+                              ? td(item.description, locale).slice(0, 57) + '...'
+                              : td(item.description, locale)}
                           </td>
                           <td className="px-2 py-1.5 text-center">
                             <span

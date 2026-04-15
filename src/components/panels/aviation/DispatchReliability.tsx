@@ -3,6 +3,7 @@
 import { useMemo } from 'react'
 import { cn } from '@/lib/utils'
 import { useTranslation } from '@/lib/i18n/use-translation'
+import { td } from '@/lib/i18n/data-i18n'
 import { HUDPanel } from '@/components/hud/HUDPanel'
 import { HUDGauge } from '@/components/hud/HUDGauge'
 import { HUDStatusBar } from '@/components/hud/HUDStatusBar'
@@ -65,7 +66,7 @@ function generateTrendData(): { day: string; reliability: number }[] {
 // ---------------------------------------------------------------------------
 
 export default function DispatchReliability() {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const allFlights = getScheduledFlights()
   const allAircraft = getAircraft()
 
@@ -285,7 +286,7 @@ export default function DispatchReliability() {
                     key={row.type}
                     className="border-t border-hud-border/20 hover:bg-hud-surface/30 transition-colors"
                   >
-                    <td className="px-2 py-1.5 text-hud-text-primary font-bold">{row.type}</td>
+                    <td className="px-2 py-1.5 text-hud-text-primary font-bold">{td(row.type, locale)}</td>
                     <td className="px-2 py-1.5 text-right text-hud-text-dim">{row.flights}</td>
                     <td className="px-2 py-1.5 text-right">
                       <span className={row.cancelled > 0 ? 'text-hud-critical' : 'text-hud-text-dim'}>

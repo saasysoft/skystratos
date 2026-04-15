@@ -3,6 +3,7 @@
 import { useMemo } from 'react'
 import { cn } from '@/lib/utils'
 import { useTranslation } from '@/lib/i18n/use-translation'
+import { td } from '@/lib/i18n/data-i18n'
 import { HUDPanel } from '@/components/hud/HUDPanel'
 import { getMaintenanceRecords, getAircraft } from '@/lib/data'
 import type { MaintenanceRecord, MaintenanceStatus } from '@/lib/data'
@@ -23,7 +24,7 @@ const STATUS_STYLES: Record<MaintenanceStatus, { bg: string; text: string; pulse
 // ---------------------------------------------------------------------------
 
 export default function ADComplianceBoard() {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   const allRecords = getMaintenanceRecords()
   const allAircraft = getAircraft()
 
@@ -135,10 +136,10 @@ export default function ADComplianceBoard() {
                     <td className="px-2 py-1.5 text-hud-text-primary font-bold">
                       {record.reference}
                     </td>
-                    <td className="px-2 py-1.5 text-hud-text-dim truncate max-w-[250px]" title={record.description}>
-                      {record.description.length > 50
-                        ? record.description.slice(0, 47) + '...'
-                        : record.description}
+                    <td className="px-2 py-1.5 text-hud-text-dim truncate max-w-[250px]" title={td(record.description, locale)}>
+                      {td(record.description, locale).length > 50
+                        ? td(record.description, locale).slice(0, 47) + '...'
+                        : td(record.description, locale)}
                     </td>
                     <td className="px-2 py-1.5 text-hud-text-primary">
                       {record.tailNumber}
@@ -152,7 +153,7 @@ export default function ADComplianceBoard() {
                           statusStyle.pulse && 'animate-pulse',
                         )}
                       >
-                        {record.status}
+                        {td(record.status, locale)}
                       </span>
                     </td>
                     <td className="px-2 py-1.5 text-hud-text-dim">

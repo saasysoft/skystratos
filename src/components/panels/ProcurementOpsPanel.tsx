@@ -5,6 +5,7 @@ import { HUDPanel } from '@/components/hud/HUDPanel'
 import { HUDGauge } from '@/components/hud/HUDGauge'
 import { HUDIndicator } from '@/components/hud/HUDIndicator'
 import { useTranslation } from '@/lib/i18n/use-translation'
+import { td } from '@/lib/i18n/data-i18n'
 import { getProcurementRecords, getInventoryItems } from '@/lib/data'
 import type { ProcurementRecord, InventoryItem } from '@/lib/mock-data/types'
 
@@ -296,7 +297,7 @@ function EmergencyOrdersList({
 }: {
   orders: EmergencyOrderRow[]
 }) {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   return (
     <div className="flex flex-col gap-1 overflow-y-auto max-h-[240px] pr-1 custom-scrollbar">
       {orders.length === 0 && (
@@ -312,7 +313,7 @@ function EmergencyOrdersList({
           {/* Item + tail number */}
           <div className="flex-1 min-w-0">
             <p className="font-mono text-hud-xs text-hud-text-primary truncate">
-              {order.item}
+              {td(order.item, locale)}
             </p>
             <p className="font-mono text-[10px] text-hud-text-dim mt-0.5">
               {order.tailNumber}
@@ -343,7 +344,7 @@ function EmergencyOrdersList({
 }
 
 function LowStockAlerts({ items }: { items: LowStockCard[] }) {
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
   return (
     <div className="flex flex-col gap-1.5 overflow-y-auto max-h-[240px] pr-1 custom-scrollbar">
       {items.map((item) => {
@@ -363,7 +364,7 @@ function LowStockAlerts({ items }: { items: LowStockCard[] }) {
             <div className="flex items-start justify-between gap-2">
               <div className="flex-1 min-w-0">
                 <p className="font-mono text-hud-xs text-hud-text-primary truncate">
-                  {item.description.split(' — ')[0]}
+                  {td(item.description, locale).split(' — ')[0]}
                 </p>
                 <div className="flex items-center gap-2 mt-1">
                   <HUDIndicator
