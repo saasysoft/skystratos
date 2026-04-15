@@ -38,20 +38,22 @@ Build SkyStratos — airline fleet operations intelligence platform with landing
   - [x] "Sign In" → "Demo" across nav (desktop + mobile) and hero — links directly to /dashboard
   - [x] "Request Demo" / "REQUEST DEMO" → "Schedule Meeting" across nav, hero (4 instances), pricing, footer
   - [x] "Contact Sales" → "Schedule Meeting" on all 3 pricing tier CTAs
-  - [x] DemoRequestForm heading → "Schedule a Meeting", submit button → "SCHEDULE MEETING"
   - [x] Footer tagline "Authorized Personnel Only" → "Fleet Intelligence Platform"
   - [x] SignInClient updated: "Request Demo Access" → "Schedule a Meeting"
   - [x] Pricing page bottom CTA updated
-  - [x] 8 files changed, build passes clean
+  - [x] Replaced 340-line lead capture form with Cal.com inline embed (cal.com/robot-friends/30min)
+  - [x] Cal.com embed: dark theme, loading spinner, fade-in, fallback link
+  - [x] Found booking repo: robobffs/robobffs-website (was Cal.com, not Twenty.com)
+  - [x] Deployed to Vercel production (2 commits)
 
 ### Remaining
 - [ ] Convert OG image from SVG placeholder to PNG (1200x630)
-- [ ] Integrate Twenty.com booking widget into Schedule Meeting flow (repo not found — check GitHub orgs)
 - [ ] Carol reviews copy on all landing page sections
 - [ ] Richard + Wally review pricing tier descriptions
 - [ ] Legal review on Terms of Service and Privacy Policy
 - [ ] Test Tower AI live chat end-to-end
 - [ ] Consider upgrading Next.js 14.2.21 (security advisory)
+- [ ] Clean up unused lead capture code (/api/leads route, lead schema, Zod/Slack webhook deps)
 
 ## Key Decisions
 - **Architecture:** Same app, route groups — (marketing)/ for public, (app)/ for protected
@@ -62,8 +64,9 @@ Build SkyStratos — airline fleet operations intelligence platform with landing
 - **Hero:** Scroll-stop with Framer Motion useScroll — video OR image crossfade fallback
 - **Form backend:** /api/leads → Zod validation → Slack webhook (with honeypot, CSRF, sanitization)
 - **Bundle:** Landing page 47.8KB (budget was 150KB)
-- **Sales motion:** Landing → Schedule Meeting OR Demo (open access) → Scoping call
+- **Sales motion:** Landing → Schedule Meeting (Cal.com) OR Demo (open access) → Scoping call
 - **Portfolio use:** Site displayed on robobffs.com as showcase piece
+- **Booking:** Cal.com embed (cal.com/robot-friends/30min) — same as robobffs.com "Book a Call"
 
 ## Blockers
 None.
@@ -78,9 +81,9 @@ Verification: `operations/skystratos-landing-page/VERIFICATION.md`
 Security: `operations/skystratos-landing-page/SECURITY-REPORT.md`
 
 ## Next Action
-1. Find & integrate Twenty.com booking repo for Schedule Meeting flow
-2. Convert OG image SVG → PNG for social sharing
-3. Team reviews: Carol (copy), Richard+Wally (pricing), Legal (ToS/Privacy)
+1. Convert OG image SVG → PNG for social sharing
+2. Team reviews: Carol (copy), Richard+Wally (pricing), Legal (ToS/Privacy)
+3. Clean up unused /api/leads route and lead schema (no longer needed)
 
 ## Context Notes
 - Source Triton repo: C:\Dev\_PROJECTS\_SAASY-LABS\SaaSy_DEV\triton\ (READ-ONLY reference)
@@ -91,4 +94,5 @@ Security: `operations/skystratos-landing-page/SECURITY-REPORT.md`
 - ANTHROPIC_API_KEY in .env.local (never committed — verified clean)
 - Flight Recorder: FLIGHT-RECORDER.md (5 sessions recorded)
 - The `robobffs.site` domain is managed under 404redteam Vercel scope
-- Twenty.com booking repo: searched 9 GitHub orgs, not found — needs manual locate
+- Cal.com booking: cal.com/robot-friends/30min (embedded inline, dark theme)
+- Booking repo: robobffs/robobffs-website (BookingModal.jsx) — was Cal.com, user remembered as Twenty.com

@@ -143,34 +143,42 @@
 
 ## Session 5 | 2026-04-15T00:00Z | [mode: auto — Portfolio Polish]
 
-**Objective:** Polish SkyStratos for display as portfolio piece on robobffs.com — remove auth gate, update CTAs from demo-request to meeting-scheduling flow.
-**Outcome:** All CTAs updated, auth bypassed, 8 files changed, deployed to production.
+**Objective:** Polish SkyStratos for display as portfolio piece on robobffs.com — remove auth gate, update CTAs, replace lead capture form with Cal.com booking embed.
+**Outcome:** Auth bypassed, CTAs updated, Cal.com embedded, deployed to production (2 commits).
 
 ### Technical
 - **Middleware bypass**: Changed `middleware.ts` from session cookie check + redirect to pass-through (`NextResponse.next()`). Dashboard now accessible without authentication.
 - **CTA rename sweep** across 8 files:
   - `LandingNav.tsx`: "Sign In" → "Demo" (→ /dashboard), "REQUEST DEMO" → "SCHEDULE MEETING" (desktop + mobile)
   - `HeroSection.tsx`: "Request Demo Access" → "Schedule Meeting", "Sign In" → "Demo" (→ /dashboard), 3 more "Request Demo" → "Schedule Meeting"
-  - `DemoRequestForm.tsx`: heading "Request Demo Access" → "Schedule a Meeting", submit "REQUEST DEMO ACCESS" → "SCHEDULE MEETING"
   - `LandingFooter.tsx`: "Request Demo" → "Schedule Meeting", tagline "Authorized Personnel Only" → "Fleet Intelligence Platform"
   - `landing-data.ts`: all 3 pricing tier `ctaLabel` "Contact Sales" → "Schedule Meeting"
   - `pricing/page.tsx`: bottom CTA "Schedule a Scoping Call" → "Schedule Meeting"
   - `SignInClient.tsx`: "Request Demo Access" → "Schedule a Meeting"
+- **Cal.com embed** replaced 340-line lead capture form: `DemoRequestForm.tsx` rewritten from 371 lines to 78 lines
+  - Inline iframe: `cal.com/robot-friends/30min?embed=true&theme=dark&layout=month_view`
+  - Loading spinner with fade-in transition (avoids white flash)
+  - Fallback "Open in Cal.com" link below embed
+  - Component name kept as `DemoRequestForm` to avoid refactoring imports — props interface preserved with unused `preselectedTier`
 - Build passes clean (0 TypeScript errors, all 14 pages static/dynamic)
-- Twenty.com booking repo searched across 9 GitHub orgs — not found. Form still functional as lead capture placeholder.
+- Found booking repo: **robobffs/robobffs-website** — user remembered it as "Twenty.com" but it was Cal.com all along
+- Cal.com account: `robot-friends` with 3 event types (15min, 30min, 30-min-discovery-call)
 
 ### Journey
 - User wants SkyStratos as a robobffs.com portfolio showcase piece
 - Three-part request: (1) remove auth gate, (2) rename Sign In → Demo, (3) rename Request Demo → Schedule Meeting
-- User mentioned a GitHub repo connecting "Book a Call" to Twenty.com account but couldn't remember which org — exhaustive search across all 9 orgs found nothing
-- All changes were straightforward text/link swaps — no architectural changes needed
+- User initially said "Twenty.com" — searched 9 GitHub orgs, found nothing. When user showed screenshot of the robobffs.com booking modal, the Cal.com branding was visible. Searched again for "cal.com" and found it immediately in robobffs/robobffs-website
+- User explicitly asked for "no information collecting, just a link to schedule" — replaced the entire form with an inline Cal.com embed rather than just a link, since that matches the robobffs.com pattern
 
 ### Patterns
 - **Portfolio conversion pattern**: When converting a gated SaaS demo to a public portfolio piece, the key changes are: (1) bypass auth middleware, (2) repoint sign-in links to dashboard, (3) update CTAs from lead-capture to meeting-scheduling language. Keep the auth infrastructure intact (sign-in page, PIN gate, API routes) — don't delete it, just bypass it. Makes it easy to re-enable later.
 - **CTA text sweep**: When renaming a CTA across a marketing site, search for ALL variations (capitalized, sentence case, button text, link text, heading text, aria labels) — they're always in more places than you think. This one had 11 instances across 8 files.
+- **Cal.com dark embed**: Use `?embed=true&theme=dark&layout=month_view` for dark-themed sites. Wrap in a container with `overflow-hidden` and a loading skeleton to avoid the white flash while the iframe loads. The `allow="payment"` attribute is needed for Cal.com's payment features.
+- **Misremembered tool names**: When a user can't find a tool/service repo, consider that they may be remembering the wrong product name. Screenshots are the fastest way to identify the actual service.
 
 ### Business
-- Build duration: ~15 minutes (text changes + build verification)
+- Build duration: ~30 minutes total (CTA sweep + Cal.com embed + 2 deploys)
 - Purpose: Portfolio piece on robobffs.com company website
-- Impact: Site now fully open — anyone can click "Demo" and see the full dashboard without credentials
-- Pending: Twenty.com booking integration for "Schedule Meeting" flow (repo needs to be located)
+- Impact: Site fully open — anyone can demo the dashboard or book a 30min call directly
+- 2 commits: `06ae1d3` (CTA sweep + auth bypass), `83e56d4` (Cal.com embed)
+- Cleanup opportunity: /api/leads route, lead schema, Zod validation, Slack webhook code are now unused
