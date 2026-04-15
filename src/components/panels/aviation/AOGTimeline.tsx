@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react'
 import { cn } from '@/lib/utils'
+import { useTranslation } from '@/lib/i18n/use-translation'
 import { HUDPanel } from '@/components/hud/HUDPanel'
 import { getAircraft, getAlerts, getScheduledFlights, getMaintenanceRecords } from '@/lib/data'
 import type { Aircraft, Alert } from '@/lib/data'
@@ -49,6 +50,7 @@ function formatCurrency(value: number): string {
 // ---------------------------------------------------------------------------
 
 export default function AOGTimeline() {
+  const { t } = useTranslation()
   const allAircraft = getAircraft()
   const allAlerts = getAlerts()
   const allFlights = getScheduledFlights()
@@ -88,7 +90,7 @@ export default function AOGTimeline() {
       const durationHours = hoursSince(aogStartTime)
 
       // Extract root cause from alert description
-      const rootCause = alert?.title.replace(/^AOG:\s*\S+\s*—\s*/, '') || 'Under investigation'
+      const rootCause = alert?.title.replace(/^AOG:\s*\S+\s*—\s*/, '') || t('aogPanel.underInvestigation')
 
       return {
         aircraft: ac,
@@ -103,7 +105,7 @@ export default function AOGTimeline() {
         maintenanceRecords: activeMaintenanceRecords,
       }
     })
-  }, [aogAircraft, alertsByAircraft, allFlights, allMaintenance])
+  }, [aogAircraft, alertsByAircraft, allFlights, allMaintenance, t])
 
   // Total history cost
   const totalHistoryCost = AOG_HISTORY.reduce((sum, e) => sum + e.totalCost, 0)
@@ -113,7 +115,7 @@ export default function AOGTimeline() {
       {/* ── Current AOG Events ────────────────────────────────────── */}
       {aogDetails.length > 0 ? (
         aogDetails.map((aog) => (
-          <HUDPanel key={aog.aircraft.id} variant="alert" glow label="ACTIVE AOG">
+          <HUDPanel key={aog.aircraft.id} variant="alert" glow label={t('aogPanel.activeAOG')}>
             <div className="space-y-3">
               {/* Header */}
               <div className="flex items-start justify-between">
@@ -127,11 +129,11 @@ export default function AOGTimeline() {
                     </span>
                   </div>
                   <div className="font-mono text-[11px] text-hud-text-dim mt-1">
-                    Location: <span className="text-hud-text-primary">{aog.location}</span>
+                    {t('aogPanel.location')}<span className="text-hud-text-primary">{aog.location}</span>
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="font-mono text-[10px] text-hud-text-dim uppercase">Duration</div>
+                  <div className="font-mono text-[10px] text-hud-text-dim uppercase">{t('aogPanel.duration')}</div>
                   <div className="font-mono text-lg font-bold text-hud-critical">
                     {formatDuration(aog.durationHours)}
                   </div>
@@ -141,7 +143,7 @@ export default function AOGTimeline() {
               {/* Root cause */}
               <div className="bg-hud-surface/50 rounded-sm px-3 py-2 border-l-2 border-hud-critical">
                 <div className="font-mono text-[10px] text-hud-text-dim uppercase tracking-wider mb-1">
-                  Root Cause
+                  {t('aogPanel.rootCause')}
                 </div>
                 <div className="font-mono text-[12px] text-hud-text-primary">
                   {aog.rootCause}
@@ -152,24 +154,24 @@ export default function AOGTimeline() {
               <div className="grid grid-cols-3 gap-3">
                 <div className="bg-hud-surface/30 rounded-sm px-3 py-2 text-center">
                   <div className="font-mono text-lg font-bold text-hud-warning">{aog.flightCount}</div>
-                  <div className="font-mono text-[10px] text-hud-text-dim uppercase">Flights Affected</div>
+                  <div className="font-mono text-[10px] text-hud-text-dim uppercase">{t('aogPanel.flightsAffected')}</div>
                 </div>
                 <div className="bg-hud-surface/30 rounded-sm px-3 py-2 text-center">
                   <div className="font-mono text-lg font-bold text-hud-warning">~{aog.totalPax.toLocaleString()}</div>
-                  <div className="font-mono text-[10px] text-hud-text-dim uppercase">Passengers</div>
+                  <div className="font-mono text-[10px] text-hud-text-dim uppercase">{t('aogPanel.passengers')}</div>
                 </div>
                 <div className="bg-hud-surface/30 rounded-sm px-3 py-2 text-center">
                   <div className="font-mono text-lg font-bold text-hud-critical">
                     {formatCurrency(aog.totalRevenue)}
                   </div>
-                  <div className="font-mono text-[10px] text-hud-text-dim uppercase">Revenue at Risk</div>
+                  <div className="font-mono text-[10px] text-hud-text-dim uppercase">{t('aogPanel.revenueAtRisk')}</div>
                 </div>
               </div>
 
               {/* Maintenance ETA */}
               {aog.maintenanceRecords.length > 0 && (
                 <div className="font-mono text-[11px] text-hud-text-dim">
-                  <span className="uppercase tracking-wider text-[10px]">Recovery ETA: </span>
+                  <span className="uppercase tracking-wider text-[10px]">{t('aogPanel.recoveryETA')}</span>
                   {aog.maintenanceRecords.map((m) => (
                     <span key={m.id} className="text-[#0088FF]">
                       {m.scheduledDate} ({m.description.slice(0, 40)})
@@ -181,12 +183,12 @@ export default function AOGTimeline() {
           </HUDPanel>
         ))
       ) : (
-        <HUDPanel variant="nominal" label="AOG STATUS">
+        <HUDPanel variant="nominal" label={t('aogPanel.aogStatus')}>
           <div className="flex items-center justify-center py-8">
             <div className="text-center">
-              <div className="font-mono text-hud-nominal text-lg font-bold">ALL CLEAR</div>
+              <div className="font-mono text-hud-nominal text-lg font-bold">{t('aogPanel.allClear')}</div>
               <div className="font-mono text-[11px] text-hud-text-dim mt-1">
-                No aircraft currently grounded
+                {t('aogPanel.noAircraft')}
               </div>
             </div>
           </div>
@@ -194,16 +196,16 @@ export default function AOGTimeline() {
       )}
 
       {/* ── AOG History ───────────────────────────────────────────── */}
-      <HUDPanel label="AOG History — Last 30 Days">
+      <HUDPanel label={t('aogPanel.history30Day')}>
         <div className="overflow-auto max-h-[300px] scrollbar-thin scrollbar-thumb-hud-border scrollbar-track-transparent">
           <table className="w-full font-mono text-[11px]">
             <thead className="sticky top-0 bg-hud-bg/95 z-10">
               <tr className="text-hud-text-dim text-[10px] uppercase tracking-wider">
-                <th className="text-left px-2 py-2 w-[80px]">Date</th>
-                <th className="text-left px-2 py-2 w-[70px]">Tail #</th>
-                <th className="text-right px-2 py-2 w-[70px]">Duration</th>
-                <th className="text-left px-2 py-2">Cause</th>
-                <th className="text-right px-2 py-2 w-[90px]">Total Cost</th>
+                <th className="text-left px-2 py-2 w-[80px]">{t('aogPanel.date')}</th>
+                <th className="text-left px-2 py-2 w-[70px]">{t('aogPanel.tailNum')}</th>
+                <th className="text-right px-2 py-2 w-[70px]">{t('aogPanel.duration')}</th>
+                <th className="text-left px-2 py-2">{t('aogPanel.cause')}</th>
+                <th className="text-right px-2 py-2 w-[90px]">{t('aogPanel.totalCost')}</th>
               </tr>
             </thead>
             <tbody>
@@ -227,7 +229,7 @@ export default function AOGTimeline() {
             <tfoot>
               <tr className="border-t-2 border-hud-border/40">
                 <td colSpan={4} className="px-2 py-2 text-right text-hud-text-dim text-[10px] uppercase tracking-wider font-bold">
-                  30-Day AOG Total
+                  {t('aogPanel.total30Day')}
                 </td>
                 <td className="px-2 py-2 text-right text-hud-critical font-bold text-sm">
                   {formatCurrency(totalHistoryCost)}

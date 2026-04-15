@@ -5,6 +5,7 @@ import Map, { Marker, Source, Layer, Popup, type MapRef } from 'react-map-gl/map
 import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { cn } from '@/lib/utils'
+import { useTranslation } from '@/lib/i18n/use-translation'
 import type { Aircraft, AircraftStatus } from '@/lib/mock-data/types'
 
 // ---------------------------------------------------------------------------
@@ -116,6 +117,7 @@ interface FleetMapGLProps {
 }
 
 export default function FleetMapGL({ aircraft, className }: FleetMapGLProps) {
+  const { t } = useTranslation()
   const mapRef = useRef<MapRef>(null)
   const [hoveredAircraft, setHoveredAircraft] = useState<Aircraft | null>(null)
   const [selectedAircraft, setSelectedAircraft] = useState<Aircraft | null>(null)
@@ -228,7 +230,7 @@ export default function FleetMapGL({ aircraft, className }: FleetMapGLProps) {
                 {hoveredAircraft.tailNumber}
               </div>
               <div className="text-[10px] text-[#7DBDD9]">
-                {hoveredAircraft.type} &middot; {hoveredAircraft.currentRoute ?? 'No route'}
+                {hoveredAircraft.type} &middot; {hoveredAircraft.currentRoute ?? t('fleet.noRoute')}
               </div>
               <div
                 className="text-[10px] font-bold"
@@ -267,21 +269,21 @@ export default function FleetMapGL({ aircraft, className }: FleetMapGLProps) {
       <div className="absolute top-2 right-2 z-10 flex flex-col gap-2">
         <div className="bg-[#061520]/90 border border-[#0A3A5C] p-2.5 font-mono shadow-[0_0_20px_rgba(0,0,0,0.6)]">
           <div className="text-[9px] uppercase tracking-[0.2em] text-[#4A7A9B] mb-2 border-b border-[#0A3A5C] pb-1">
-            Map Controls
+            {t('fleet.mapControls')}
           </div>
 
           <ToggleSwitch
-            label="Aircraft Labels"
+            label={t('fleet.aircraftLabels')}
             checked={showAircraftLabels}
             onChange={setShowAircraftLabels}
           />
           <ToggleSwitch
-            label="Hub Airports"
+            label={t('fleet.hubAirports')}
             checked={showHubs}
             onChange={setShowHubs}
           />
           <ToggleSwitch
-            label="Route Lines"
+            label={t('fleet.routeLines')}
             checked={showRoutes}
             onChange={setShowRoutes}
           />
@@ -307,7 +309,7 @@ export default function FleetMapGL({ aircraft, className }: FleetMapGLProps) {
       {/* Legend - Bottom Left */}
       <div className="absolute bottom-3 left-3 z-10 bg-[#061520]/90 border border-[#0A3A5C] p-2 font-mono shadow-[0_0_20px_rgba(0,0,0,0.6)]">
         <div className="text-[9px] uppercase tracking-[0.2em] text-[#4A7A9B] mb-1.5">
-          Fleet Status
+          {t('fleet.fleetStatus')}
         </div>
         {(Object.entries(STATUS_COLORS) as [AircraftStatus, string][]).map(([status, color]) => (
           <div key={status} className="flex items-center gap-1.5 py-0.5">
@@ -476,6 +478,7 @@ function AircraftDetailCard({
   aircraft: Aircraft
   onClose: () => void
 }) {
+  const { t } = useTranslation()
   const color = STATUS_COLORS[aircraft.status]
 
   return (
@@ -483,7 +486,7 @@ function AircraftDetailCard({
       {/* Header */}
       <div className="flex items-center justify-between px-3 py-1.5 border-b border-[#0A3A5C] bg-[#020B12]/60">
         <span className="text-[10px] uppercase tracking-[0.15em] text-[#4A7A9B]">
-          Aircraft Detail
+          {t('fleet.aircraftDetail')}
         </span>
         <button
           onClick={onClose}
@@ -500,54 +503,54 @@ function AircraftDetailCard({
         </div>
 
         <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-[10px]">
-          <DetailRow label="Type" value={aircraft.type} />
+          <DetailRow label={t('fleet.type')} value={aircraft.type} />
           <DetailRow
-            label="Status"
+            label={t('fleet.status')}
             value={aircraft.status}
             valueColor={color}
           />
           <DetailRow
-            label="Route"
+            label={t('fleet.route')}
             value={aircraft.currentRoute ?? '\u2014'}
           />
           <DetailRow
-            label="Airport"
+            label={t('fleet.airport')}
             value={aircraft.currentAirport ?? '\u2014'}
           />
           <DetailRow
-            label="CPFH"
+            label={t('fleet.cpfh')}
             value={`$${aircraft.costPerFlightHour.toLocaleString()}`}
             valueColor="#00D4FF"
           />
           <DetailRow
-            label="Altitude"
+            label={t('fleet.altitude')}
             value={aircraft.currentPosition.altitude > 0
               ? `FL${Math.round(aircraft.currentPosition.altitude / 100)}`
               : 'GND'}
           />
           <DetailRow
-            label="GS"
+            label={t('fleet.groundSpeed')}
             value={`${aircraft.currentPosition.groundSpeed} kts`}
           />
           <DetailRow
-            label="Heading"
+            label={t('fleet.heading')}
             value={`${aircraft.currentPosition.heading}\u00B0`}
           />
           <DetailRow
-            label="FH"
+            label={t('fleet.flightHours')}
             value={aircraft.totalFlightHours.toLocaleString()}
           />
           <DetailRow
-            label="Cycles"
+            label={t('fleet.cycles')}
             value={aircraft.totalCycles.toLocaleString()}
           />
           <DetailRow
-            label="MEL"
+            label={t('fleet.mel')}
             value={String(aircraft.activeMELCount)}
             valueColor={aircraft.activeMELCount > 0 ? '#FF8C00' : undefined}
           />
           <DetailRow
-            label="Next Check"
+            label={t('fleet.nextCheck')}
             value={aircraft.nextScheduledCheck}
           />
         </div>

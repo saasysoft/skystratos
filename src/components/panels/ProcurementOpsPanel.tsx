@@ -331,7 +331,7 @@ function EmergencyOrdersList({
 
           {/* Delivery */}
           <div className="text-right flex-shrink-0 w-14">
-            <p className="font-mono text-[10px] text-hud-text-dim">ETA</p>
+            <p className="font-mono text-[10px] text-hud-text-dim">{t('procurement.eta')}</p>
             <p className="font-mono text-hud-xs text-hud-text-secondary">
               {daysUntil(order.expectedDelivery)}d
             </p>
@@ -384,7 +384,7 @@ function LowStockAlerts({ items }: { items: LowStockCard[] }) {
                     : 'bg-hud-warning/15 text-hud-warning',
                 ].join(' ')}
               >
-                {item.status}
+                {isOutOfStock ? t('status.outOfStock') : t('status.lowStock')}
               </span>
             </div>
           </div>

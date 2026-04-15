@@ -89,19 +89,18 @@ function HUDTooltipAOG({ active, payload, label }: any) {
 /* ============================================
    Month label formatter
    ============================================ */
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-
-function monthLabel(dateStr: string): string {
+function monthLabel(dateStr: string, months: string[]): string {
   const d = new Date(dateStr)
-  return `${MONTHS[d.getMonth()]} '${String(d.getFullYear()).slice(2)}`
+  return `${months[d.getMonth()]} '${String(d.getFullYear()).slice(2)}`
 }
 
 /* ============================================
    CostAnalysisPanel
    ============================================ */
 export function CostAnalysisPanel() {
-  const { t } = useTranslation()
+  const { t, tArray } = useTranslation()
 
+  const months = tArray('cost.months')
   const costData = useMemo(() => getCostData(), [])
 
   // ---- Computed metrics ----
@@ -122,17 +121,17 @@ export function CostAnalysisPanel() {
   const trendData = useMemo(
     () =>
       costData.map((m) => ({
-        month: monthLabel(m.month),
+        month: monthLabel(m.month, months),
         actual: m.totalFleetCost,
         budget: m.budgetedCost,
       })),
-    [costData]
+    [costData, months]
   )
 
   const breakdownData = useMemo(
     () =>
       costData.map((m) => ({
-        month: monthLabel(m.month),
+        month: monthLabel(m.month, months),
         Fuel: m.fuelCost,
         Maintenance: m.scheduledMaintenanceCost + m.unscheduledMaintenanceCost,
         Crew: m.crewCost,
@@ -140,16 +139,16 @@ export function CostAnalysisPanel() {
         Insurance: m.insuranceCost,
         Procurement: m.procurementCost,
       })),
-    [costData]
+    [costData, months]
   )
 
   const aogTrendData = useMemo(
     () =>
       costData.map((m) => ({
-        month: monthLabel(m.month),
+        month: monthLabel(m.month, months),
         aog: m.aogProcurementCost,
       })),
-    [costData]
+    [costData, months]
   )
 
   // Healthy threshold: average of first 3 months (baseline)

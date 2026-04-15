@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react'
 import { cn } from '@/lib/utils'
+import { useTranslation } from '@/lib/i18n/use-translation'
 import { HUDPanel } from '@/components/hud/HUDPanel'
 import { getMaintenanceRecords, getAircraft } from '@/lib/data'
 import type { MaintenanceRecord, MaintenanceStatus } from '@/lib/data'
@@ -22,6 +23,7 @@ const STATUS_STYLES: Record<MaintenanceStatus, { bg: string; text: string; pulse
 // ---------------------------------------------------------------------------
 
 export default function ADComplianceBoard() {
+  const { t } = useTranslation()
   const allRecords = getMaintenanceRecords()
   const allAircraft = getAircraft()
 
@@ -64,14 +66,14 @@ export default function ADComplianceBoard() {
 
   if (sorted.length === 0) {
     return (
-      <HUDPanel label="AD/SB Compliance">
+      <HUDPanel label={t('adCompliance.title')}>
         <div className="flex items-center justify-center py-12">
           <div className="text-center">
             <div className="font-mono text-hud-text-dim text-sm uppercase tracking-wider mb-2">
-              No AD/SB Records Found
+              {t('adCompliance.noRecords')}
             </div>
             <div className="font-mono text-[11px] text-hud-text-dim/60">
-              Maintenance records contain no airworthiness directive or service bulletin references.
+              {t('adCompliance.noRecordsDetail')}
             </div>
           </div>
         </div>
@@ -82,13 +84,13 @@ export default function ADComplianceBoard() {
   return (
     <div className="space-y-4">
       {/* ── Summary Strip ─────────────────────────────────────────── */}
-      <HUDPanel label="AD/SB Compliance Summary">
+      <HUDPanel label={t('adCompliance.summary')}>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <SummaryCell label="Total ADs/SBs" value={String(stats.total)} />
-          <SummaryCell label="Complied" value={`${stats.compliedPct}%`} color="text-hud-nominal" />
-          <SummaryCell label="In Progress" value={String(stats.inProgress)} color="text-[#0088FF]" />
+          <SummaryCell label={t('adCompliance.totalADsSBs')} value={String(stats.total)} />
+          <SummaryCell label={t('adCompliance.complied')} value={`${stats.compliedPct}%`} color="text-hud-nominal" />
+          <SummaryCell label={t('adCompliance.inProgress')} value={String(stats.inProgress)} color="text-[#0088FF]" />
           <SummaryCell
-            label="Overdue"
+            label={t('adCompliance.overdue')}
             value={String(stats.overdue)}
             color={stats.overdue > 0 ? 'text-hud-critical' : 'text-hud-text-primary'}
             pulse={stats.overdue > 0}
@@ -97,17 +99,17 @@ export default function ADComplianceBoard() {
       </HUDPanel>
 
       {/* ── Compliance Table ──────────────────────────────────────── */}
-      <HUDPanel label="Directive & Bulletin Tracker">
+      <HUDPanel label={t('adCompliance.tracker')}>
         <div className="overflow-auto max-h-[400px] scrollbar-thin scrollbar-thumb-hud-border scrollbar-track-transparent">
           <table className="w-full font-mono text-[11px]">
             <thead className="sticky top-0 bg-hud-bg/95 z-10">
               <tr className="text-hud-text-dim text-[10px] uppercase tracking-wider">
-                <th className="text-left px-2 py-2 w-[50px]">Type</th>
-                <th className="text-left px-2 py-2 w-[160px]">Reference</th>
-                <th className="text-left px-2 py-2">Description</th>
-                <th className="text-left px-2 py-2 w-[80px]">Aircraft</th>
-                <th className="text-center px-2 py-2 w-[100px]">Status</th>
-                <th className="text-left px-2 py-2 w-[90px]">Due Date</th>
+                <th className="text-left px-2 py-2 w-[50px]">{t('adCompliance.type')}</th>
+                <th className="text-left px-2 py-2 w-[160px]">{t('adCompliance.reference')}</th>
+                <th className="text-left px-2 py-2">{t('adCompliance.description')}</th>
+                <th className="text-left px-2 py-2 w-[80px]">{t('adCompliance.aircraft')}</th>
+                <th className="text-center px-2 py-2 w-[100px]">{t('adCompliance.status')}</th>
+                <th className="text-left px-2 py-2 w-[90px]">{t('adCompliance.dueDate')}</th>
               </tr>
             </thead>
             <tbody>

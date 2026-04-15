@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react'
 import { cn } from '@/lib/utils'
+import { useTranslation } from '@/lib/i18n/use-translation'
 import { HUDPanel } from '@/components/hud/HUDPanel'
 import { HUDGauge } from '@/components/hud/HUDGauge'
 import { HUDStatusBar } from '@/components/hud/HUDStatusBar'
@@ -24,7 +25,7 @@ import {
 const AOG_STATUSES = new Set(['AOG', 'In Maintenance'])
 
 // Simulated cause breakdown multipliers
-const CAUSE_LABELS = ['Maintenance', 'Parts/Inventory', 'Weather', 'Crew', 'Other'] as const
+const CAUSE_LABELS_KEYS = ['causeMaintenance', 'causePartsInventory', 'causeWeather', 'causeCrew', 'causeOther'] as const
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -64,6 +65,7 @@ function generateTrendData(): { day: string; reliability: number }[] {
 // ---------------------------------------------------------------------------
 
 export default function DispatchReliability() {
+  const { t } = useTranslation()
   const allFlights = getScheduledFlights()
   const allAircraft = getAircraft()
 
@@ -116,13 +118,13 @@ export default function DispatchReliability() {
 
     const total = maintenanceCancelled + weather + crew + parts + other
     return [
-      { label: 'Maintenance', count: maintenanceCancelled, pct: total > 0 ? (maintenanceCancelled / total) * 100 : 0 },
-      { label: 'Parts/Inventory', count: parts, pct: total > 0 ? (parts / total) * 100 : 0 },
-      { label: 'Weather', count: weather, pct: total > 0 ? (weather / total) * 100 : 0 },
-      { label: 'Crew', count: crew, pct: total > 0 ? (crew / total) * 100 : 0 },
-      { label: 'Other', count: other, pct: total > 0 ? (other / total) * 100 : 0 },
+      { label: t('dispatch.causeMaintenance'), count: maintenanceCancelled, pct: total > 0 ? (maintenanceCancelled / total) * 100 : 0 },
+      { label: t('dispatch.causePartsInventory'), count: parts, pct: total > 0 ? (parts / total) * 100 : 0 },
+      { label: t('dispatch.causeWeather'), count: weather, pct: total > 0 ? (weather / total) * 100 : 0 },
+      { label: t('dispatch.causeCrew'), count: crew, pct: total > 0 ? (crew / total) * 100 : 0 },
+      { label: t('dispatch.causeOther'), count: other, pct: total > 0 ? (other / total) * 100 : 0 },
     ]
-  }, [cancelledFlights])
+  }, [cancelledFlights, t])
 
   // By aircraft type breakdown
   const typeBreakdown = useMemo(() => {
@@ -160,12 +162,12 @@ export default function DispatchReliability() {
       {/* ── Top Row: Gauge + Trend ────────────────────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Gauge */}
-        <HUDPanel label="Dispatch Reliability" glow>
+        <HUDPanel label={t('dispatch.title')} glow>
           <div className="flex flex-col items-center py-4">
             <HUDGauge
               value={gaugeValue}
               max={100}
-              label="Dispatch Rate"
+              label={t('dispatch.dispatchRate')}
               unit="%"
               thresholds={{ warning: 98.5, critical: 99.5 }}
               size={180}
@@ -173,11 +175,11 @@ export default function DispatchReliability() {
             <div className="mt-3 flex items-center gap-6 font-mono text-[11px]">
               <div className="text-center">
                 <div className="text-hud-text-primary text-lg font-bold">{totalFlights}</div>
-                <div className="text-hud-text-dim text-[10px] uppercase">Total Flights</div>
+                <div className="text-hud-text-dim text-[10px] uppercase">{t('dispatch.totalFlights')}</div>
               </div>
               <div className="text-center">
                 <div className="text-hud-critical text-lg font-bold">{cancelledFlights}</div>
-                <div className="text-hud-text-dim text-[10px] uppercase">Cancelled</div>
+                <div className="text-hud-text-dim text-[10px] uppercase">{t('dispatch.cancelled')}</div>
               </div>
               <div className="text-center">
                 <div className={cn(
@@ -187,14 +189,14 @@ export default function DispatchReliability() {
                 )}>
                   {reliabilityPct.toFixed(2)}%
                 </div>
-                <div className="text-hud-text-dim text-[10px] uppercase">Target: 99.0%</div>
+                <div className="text-hud-text-dim text-[10px] uppercase">{t('dispatch.target')}</div>
               </div>
             </div>
           </div>
         </HUDPanel>
 
         {/* Trend Chart */}
-        <HUDPanel label="30-Day Trend">
+        <HUDPanel label={t('dispatch.trend30Day')}>
           <div className="h-[220px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={trendData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
@@ -222,7 +224,7 @@ export default function DispatchReliability() {
                     fontSize: 11,
                     color: '#C8E6FF',
                   }}
-                  formatter={(value: number) => [`${value}%`, 'Reliability']}
+                  formatter={(value: number) => [`${value}%`, t('dispatch.reliability')]}
                 />
                 {/* Target line */}
                 <Line
@@ -232,7 +234,7 @@ export default function DispatchReliability() {
                   strokeWidth={1}
                   strokeDasharray="5 5"
                   dot={false}
-                  name="Target"
+                  name={t('dispatch.targetLine')}
                 />
                 <Line
                   type="monotone"
@@ -251,7 +253,7 @@ export default function DispatchReliability() {
       {/* ── Bottom Row: Causes + Type Breakdown ───────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Cause Breakdown */}
-        <HUDPanel label="Cancellation Causes">
+        <HUDPanel label={t('dispatch.cancellationCauses')}>
           <div className="space-y-3">
             {causes.map((cause) => (
               <div key={cause.label} className="flex items-center gap-3">
@@ -266,15 +268,15 @@ export default function DispatchReliability() {
         </HUDPanel>
 
         {/* By Aircraft Type */}
-        <HUDPanel label="Reliability by Type">
+        <HUDPanel label={t('dispatch.reliabilityByType')}>
           <div className="overflow-auto">
             <table className="w-full font-mono text-[11px]">
               <thead>
                 <tr className="text-hud-text-dim text-[10px] uppercase tracking-wider">
-                  <th className="text-left px-2 py-2">Type</th>
-                  <th className="text-right px-2 py-2">Flights</th>
-                  <th className="text-right px-2 py-2">Cancelled</th>
-                  <th className="text-right px-2 py-2">Reliability</th>
+                  <th className="text-left px-2 py-2">{t('dispatch.type')}</th>
+                  <th className="text-right px-2 py-2">{t('dispatch.flights')}</th>
+                  <th className="text-right px-2 py-2">{t('dispatch.cancelled')}</th>
+                  <th className="text-right px-2 py-2">{t('dispatch.reliability')}</th>
                 </tr>
               </thead>
               <tbody>

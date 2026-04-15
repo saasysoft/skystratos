@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react'
 import { cn } from '@/lib/utils'
+import { useTranslation } from '@/lib/i18n/use-translation'
 import { HUDPanel } from '@/components/hud/HUDPanel'
 import { getMELItems, getAircraft } from '@/lib/data'
 import type { MELItem } from '@/lib/data'
@@ -30,18 +31,19 @@ function hoursUntilExpiry(expiryDate: string): number {
   return (expiry.getTime() - NOW.getTime()) / MS_PER_HOUR
 }
 
-function formatCountdown(hours: number): { label: string; status: 'expired' | 'approaching' | 'active' } {
-  if (hours <= 0) return { label: 'EXPIRED', status: 'expired' }
+function formatCountdown(hours: number): { days: number; hrs: number; status: 'expired' | 'approaching' | 'active' } {
+  if (hours <= 0) return { days: 0, hrs: 0, status: 'expired' }
 
   const days = Math.floor(hours / 24)
   const hrs = Math.floor(hours % 24)
 
   if (hours <= APPROACHING_HOURS) {
-    return { label: `${hrs}h remaining`, status: 'approaching' }
+    return { days, hrs, status: 'approaching' }
   }
 
   return {
-    label: `${days}d ${hrs}h remaining`,
+    days,
+    hrs,
     status: days <= 1 ? 'approaching' : 'active',
   }
 }
@@ -51,8 +53,15 @@ function formatCountdown(hours: number): { label: string; status: 'expired' | 'a
 // ---------------------------------------------------------------------------
 
 export default function MELTracker() {
+  const { t } = useTranslation()
   const allMEL = getMELItems({ status: 'active' })
   const allAircraft = getAircraft()
+
+  function countdownLabel(cd: ReturnType<typeof formatCountdown>): string {
+    if (cd.status === 'expired') return t('mel.expired')
+    if (cd.days === 0) return `${cd.hrs}${t('mel.hRemaining')}`
+    return `${cd.days}d ${cd.hrs}${t('mel.hRemaining')}`
+  }
 
   const aircraftMap = useMemo(() => {
     const map = new Map<string, { tailNumber: string; type: string }>()
@@ -108,17 +117,17 @@ export default function MELTracker() {
   return (
     <div className="space-y-4">
       {/* ── Summary Strip ─────────────────────────────────────────── */}
-      <HUDPanel label="MEL Deferral Summary">
+      <HUDPanel label={t('mel.title')}>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <SummaryCell label="Active MELs" value={stats.total} />
-          <SummaryCell label="Category A" value={stats.catA} color="text-hud-critical" />
+          <SummaryCell label={t('mel.activeMELs')} value={stats.total} />
+          <SummaryCell label={t('mel.categoryA')} value={stats.catA} color="text-hud-critical" />
           <SummaryCell
-            label="Approaching Limit"
+            label={t('mel.approachingLimit')}
             value={stats.approaching}
             color={stats.approaching > 0 ? 'text-hud-warning' : 'text-hud-text-primary'}
           />
           <SummaryCell
-            label="A/C with 3+ MELs"
+            label={t('mel.acWith3Plus')}
             value={stats.aircraftWith3Plus}
             color={stats.aircraftWith3Plus > 0 ? 'text-hud-warning' : 'text-hud-text-primary'}
           />
@@ -126,7 +135,7 @@ export default function MELTracker() {
       </HUDPanel>
 
       {/* ── Main Table ────────────────────────────────────────────── */}
-      <HUDPanel label="Active MEL Items">
+      <HUDPanel label={t('mel.activeItems')}>
         <div className="overflow-auto max-h-[400px] scrollbar-thin scrollbar-thumb-hud-border scrollbar-track-transparent">
           {Array.from(grouped.entries()).map(([aircraftId, group]) => {
             const ac = aircraftMap.get(aircraftId)
@@ -147,10 +156,10 @@ export default function MELTracker() {
                   <span className="font-bold">{group.tailNumber}</span>
                   {ac && <span className="text-[10px] opacity-70">{ac.type}</span>}
                   <span className="ml-auto text-[10px]">
-                    {group.items.length} item{group.items.length !== 1 ? 's' : ''}
+                    {group.items.length} {t('mel.itemsLabel')}
                   </span>
                   {hasWarning && (
-                    <span className="text-[10px] text-hud-warning animate-pulse">3+ MELs</span>
+                    <span className="text-[10px] text-hud-warning animate-pulse">3+ {t('mel.melsLabel')}</span>
                   )}
                 </div>
 
@@ -158,12 +167,12 @@ export default function MELTracker() {
                 <table className="w-full font-mono text-[11px]">
                   <thead>
                     <tr className="text-hud-text-dim text-[10px] uppercase tracking-wider">
-                      <th className="text-left px-2 py-1 w-[72px]">ATA</th>
-                      <th className="text-left px-2 py-1">Description</th>
-                      <th className="text-center px-2 py-1 w-[44px]">Cat</th>
-                      <th className="text-left px-2 py-1 w-[80px]">Deferred</th>
-                      <th className="text-left px-2 py-1 w-[80px]">Expiry</th>
-                      <th className="text-right px-2 py-1 w-[120px]">Countdown</th>
+                      <th className="text-left px-2 py-1 w-[72px]">{t('mel.ata')}</th>
+                      <th className="text-left px-2 py-1">{t('mel.description')}</th>
+                      <th className="text-center px-2 py-1 w-[44px]">{t('mel.cat')}</th>
+                      <th className="text-left px-2 py-1 w-[80px]">{t('mel.deferred')}</th>
+                      <th className="text-left px-2 py-1 w-[80px]">{t('mel.expiry')}</th>
+                      <th className="text-right px-2 py-1 w-[120px]">{t('mel.countdown')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -208,7 +217,7 @@ export default function MELTracker() {
                                 item.countdown.status === 'active' && 'text-hud-text-dim',
                               )}
                             >
-                              {item.countdown.label}
+                              {countdownLabel(item.countdown)}
                             </span>
                           </td>
                         </tr>

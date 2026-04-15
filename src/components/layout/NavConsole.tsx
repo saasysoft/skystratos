@@ -63,12 +63,12 @@ const primaryTabs: { id: TabId; labelKey: string; icon: JSX.Element }[] = [
   },
 ]
 
-const secondaryTabs: { id: TabId; label: string }[] = [
-  { id: 'mel', label: 'MEL' },
-  { id: 'compliance', label: 'AD Compliance' },
-  { id: 'dispatch', label: 'Dispatch' },
-  { id: 'aog', label: 'AOG' },
-  { id: 'inventory-map', label: 'Inventory' },
+const secondaryTabs: { id: TabId; labelKey: string }[] = [
+  { id: 'mel', labelKey: 'navSub.mel' },
+  { id: 'compliance', labelKey: 'navSub.adCompliance' },
+  { id: 'dispatch', labelKey: 'navSub.dispatch' },
+  { id: 'aog', labelKey: 'navSub.aog' },
+  { id: 'inventory-map', labelKey: 'navSub.inventory' },
 ]
 
 export default function NavConsole({ activeTab, onTabChange, onTowerToggle, towerOpen }: NavConsoleProps) {
@@ -152,7 +152,7 @@ export default function NavConsole({ activeTab, onTabChange, onTowerToggle, towe
               <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.5" />
               <path d="M12 3v6M12 15v6M3 12h6M15 12h6M5.64 5.64l4.24 4.24M14.12 14.12l4.24 4.24M5.64 18.36l4.24-4.24M14.12 9.88l4.24-4.24" stroke="currentColor" strokeWidth="1" opacity="0.7" />
             </svg>
-            <span>TOWER AI</span>
+            <span>{t('navSub.towerAI')}</span>
             {/* Online indicator dot */}
             <span className="w-2 h-2 rounded-full bg-hud-nominal animate-pulse-slow" />
           </button>
@@ -166,7 +166,7 @@ export default function NavConsole({ activeTab, onTabChange, onTowerToggle, towe
         aria-label="Aviation modules"
       >
         <span className="font-mono text-[9px] text-hud-text-dim tracking-widest uppercase mr-2 shrink-0 opacity-60">
-          AVIATION
+          {t('navSub.aviation')}
         </span>
         <div className="w-px h-3 bg-hud-border/50 mr-1" />
         {secondaryTabs.map((tab) => {
@@ -186,7 +186,7 @@ export default function NavConsole({ activeTab, onTabChange, onTowerToggle, towe
                   : 'text-hud-text-dim hover:text-hud-text-secondary'
               )}
             >
-              {tab.label}
+              {t(tab.labelKey)}
               {isActive && (
                 <span
                   className="absolute bottom-0 left-1 right-1 h-[1px] bg-hud-primary rounded-full"

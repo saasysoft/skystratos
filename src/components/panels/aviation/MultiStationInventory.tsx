@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react'
 import { cn } from '@/lib/utils'
+import { useTranslation } from '@/lib/i18n/use-translation'
 import { HUDPanel } from '@/components/hud/HUDPanel'
 import { HUDIndicator } from '@/components/hud/HUDIndicator'
 import { getInventoryItems } from '@/lib/data'
@@ -54,6 +55,7 @@ interface TransferRecommendation {
 // ---------------------------------------------------------------------------
 
 export default function MultiStationInventory() {
+  const { t } = useTranslation()
   const allItems = getInventoryItems()
 
   // Compute per-station stats
@@ -120,14 +122,14 @@ export default function MultiStationInventory() {
   return (
     <div className="space-y-4">
       {/* ── Fleet Summary ─────────────────────────────────────────── */}
-      <HUDPanel label="Fleet Inventory Summary">
+      <HUDPanel label={t('inventoryPanel.fleetSummary')}>
         <div className="grid grid-cols-3 gap-4">
           <div className="text-center">
             <div className="font-mono text-2xl font-bold text-hud-text-primary">
               {formatCurrency(fleetSummary.totalValue)}
             </div>
             <div className="font-mono text-[10px] text-hud-text-dim uppercase tracking-wider mt-1">
-              Total Fleet Value
+              {t('inventoryPanel.totalFleetValue')}
             </div>
           </div>
           <div className="text-center">
@@ -138,7 +140,7 @@ export default function MultiStationInventory() {
               {fleetSummary.criticalStations}
             </div>
             <div className="font-mono text-[10px] text-hud-text-dim uppercase tracking-wider mt-1">
-              Stations with Gaps
+              {t('inventoryPanel.stationsWithGaps')}
             </div>
           </div>
           <div className="text-center">
@@ -149,7 +151,7 @@ export default function MultiStationInventory() {
               {fleetSummary.totalOOS}
             </div>
             <div className="font-mono text-[10px] text-hud-text-dim uppercase tracking-wider mt-1">
-              Total Out of Stock
+              {t('inventoryPanel.totalOutOfStock')}
             </div>
           </div>
         </div>
@@ -168,7 +170,7 @@ export default function MultiStationInventory() {
               <div className="flex items-center justify-between">
                 <HUDIndicator
                   status={station.healthStatus}
-                  label="Health"
+                  label={t('inventoryPanel.health')}
                   value={`${station.healthPct}%`}
                 />
               </div>
@@ -179,13 +181,13 @@ export default function MultiStationInventory() {
                   <div className="font-mono text-lg font-bold text-hud-text-primary">
                     {station.totalItems}
                   </div>
-                  <div className="font-mono text-[9px] text-hud-text-dim uppercase">Items</div>
+                  <div className="font-mono text-[9px] text-hud-text-dim uppercase">{t('inventoryPanel.itemsLabel')}</div>
                 </div>
                 <div>
                   <div className="font-mono text-lg font-bold text-hud-text-primary">
                     {formatCurrency(station.totalValue)}
                   </div>
-                  <div className="font-mono text-[9px] text-hud-text-dim uppercase">Value</div>
+                  <div className="font-mono text-[9px] text-hud-text-dim uppercase">{t('inventoryPanel.value')}</div>
                 </div>
               </div>
 
@@ -202,7 +204,7 @@ export default function MultiStationInventory() {
                   </span>
                 )}
                 {station.outOfStock === 0 && station.lowStock === 0 && (
-                  <span className="text-hud-nominal text-[10px]">All stocked</span>
+                  <span className="text-hud-nominal text-[10px]">{t('inventoryPanel.allStocked')}</span>
                 )}
               </div>
 
@@ -223,34 +225,34 @@ export default function MultiStationInventory() {
       </div>
 
       {/* ── Cross-Station Transfer Recommendations ────────────────── */}
-      <HUDPanel label="Nearest Available — Transfer Recommendations">
+      <HUDPanel label={t('inventoryPanel.transferTitle')}>
         {transfers.length > 0 ? (
           <div className="overflow-auto max-h-[300px] scrollbar-thin scrollbar-thumb-hud-border scrollbar-track-transparent">
             <table className="w-full font-mono text-[11px]">
               <thead className="sticky top-0 bg-hud-bg/95 z-10">
                 <tr className="text-hud-text-dim text-[10px] uppercase tracking-wider">
-                  <th className="text-left px-2 py-2">Part Description</th>
-                  <th className="text-left px-2 py-2 w-[110px]">Needed At</th>
-                  <th className="text-left px-2 py-2 w-[110px]">Available At</th>
-                  <th className="text-right px-2 py-2 w-[50px]">Qty</th>
-                  <th className="text-right px-2 py-2 w-[80px]">Lead Time</th>
+                  <th className="text-left px-2 py-2">{t('inventoryPanel.partDescription')}</th>
+                  <th className="text-left px-2 py-2 w-[110px]">{t('inventoryPanel.neededAt')}</th>
+                  <th className="text-left px-2 py-2 w-[110px]">{t('inventoryPanel.availableAt')}</th>
+                  <th className="text-right px-2 py-2 w-[50px]">{t('inventoryPanel.qty')}</th>
+                  <th className="text-right px-2 py-2 w-[80px]">{t('inventoryPanel.leadTime')}</th>
                 </tr>
               </thead>
               <tbody>
-                {transfers.map((t, i) => (
+                {transfers.map((tr, i) => (
                   <tr
                     key={i}
                     className="border-t border-hud-border/20 hover:bg-hud-surface/30 transition-colors"
                   >
-                    <td className="px-2 py-1.5 text-hud-text-primary truncate max-w-[220px]" title={t.partDescription}>
-                      {t.partDescription.length > 45
-                        ? t.partDescription.slice(0, 42) + '...'
-                        : t.partDescription}
+                    <td className="px-2 py-1.5 text-hud-text-primary truncate max-w-[220px]" title={tr.partDescription}>
+                      {tr.partDescription.length > 45
+                        ? tr.partDescription.slice(0, 42) + '...'
+                        : tr.partDescription}
                     </td>
-                    <td className="px-2 py-1.5 text-hud-critical font-bold">{t.neededAt}</td>
-                    <td className="px-2 py-1.5 text-hud-nominal">{t.availableAt}</td>
-                    <td className="px-2 py-1.5 text-right text-hud-text-primary">{t.qtyAvailable}</td>
-                    <td className="px-2 py-1.5 text-right text-hud-text-dim">{t.leadTimeDays}d</td>
+                    <td className="px-2 py-1.5 text-hud-critical font-bold">{tr.neededAt}</td>
+                    <td className="px-2 py-1.5 text-hud-nominal">{tr.availableAt}</td>
+                    <td className="px-2 py-1.5 text-right text-hud-text-primary">{tr.qtyAvailable}</td>
+                    <td className="px-2 py-1.5 text-right text-hud-text-dim">{tr.leadTimeDays}d</td>
                   </tr>
                 ))}
               </tbody>
@@ -259,7 +261,7 @@ export default function MultiStationInventory() {
         ) : (
           <div className="flex items-center justify-center py-6">
             <div className="font-mono text-[11px] text-hud-text-dim">
-              No cross-station transfers available for current out-of-stock items.
+              {t('inventoryPanel.noTransfers')}
             </div>
           </div>
         )}

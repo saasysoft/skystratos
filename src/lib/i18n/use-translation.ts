@@ -42,5 +42,18 @@ export function useTranslation() {
     [locale]
   );
 
-  return { t, locale, setLocale };
+  const tArray = useCallback(
+    (key: string): string[] => {
+      const parts = key.split('.');
+      let current: unknown = translations[locale];
+      for (const part of parts) {
+        if (current === null || current === undefined || typeof current !== 'object') return [];
+        current = (current as Record<string, unknown>)[part];
+      }
+      return Array.isArray(current) ? current as string[] : [];
+    },
+    [locale]
+  );
+
+  return { t, tArray, locale, setLocale };
 }
