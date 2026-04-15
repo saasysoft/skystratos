@@ -3,25 +3,28 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { HUDButton } from '@/components/hud/HUDButton'
-import type { NavSection } from '@/lib/types/landing'
-import { NAV_SECTIONS } from '@/lib/data/landing-data'
 import { cn } from '@/lib/utils'
+import { useTranslation } from '@/lib/i18n/use-translation'
+import { getNavSections, getLandingStrings } from '@/lib/i18n/landing-i18n'
 
 interface LandingNavProps {
-  sections?: NavSection[]
   activeSectionId?: string | null
 }
 
 export default function LandingNav({
-  sections = NAV_SECTIONS,
   activeSectionId: externalActiveId,
 }: LandingNavProps) {
   const [internalActiveId, setInternalActiveId] = useState<string | null>(null)
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const observerRef = useRef<IntersectionObserver | null>(null)
+  const { locale, setLocale } = useTranslation()
+  const s = getLandingStrings(locale)
+  const sections = getNavSections(locale)
 
   const activeId = externalActiveId ?? internalActiveId
+
+  const toggleLocale = () => setLocale(locale === 'en' ? 'zh-TW' : 'en')
 
   // ── Scroll state ──────────────────────────────────────────────────
   useEffect(() => {
@@ -35,7 +38,7 @@ export default function LandingNav({
   useEffect(() => {
     if (externalActiveId !== undefined && externalActiveId !== null) return
 
-    const ids = sections.map((s) => s.id)
+    const ids = sections.map((sec) => sec.id)
     observerRef.current = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -70,7 +73,7 @@ export default function LandingNav({
 
   // Filter out 'hero' and 'demo' from visible nav links — hero is the logo click,
   // demo is the CTA button
-  const navLinks = sections.filter((s) => s.id !== 'hero' && s.id !== 'demo')
+  const navLinks = sections.filter((sec) => sec.id !== 'hero' && sec.id !== 'demo')
 
   return (
     <>
@@ -113,15 +116,27 @@ export default function LandingNav({
               </button>
             ))}
 
+            {/* Language toggle */}
+            <button
+              type="button"
+              onClick={toggleLocale}
+              className="font-mono text-hud-xs tracking-wider px-2 py-1 rounded-sm transition-colors hover:bg-hud-primary/10"
+              aria-label="Toggle language"
+            >
+              <span className={cn(locale === 'en' ? 'text-hud-primary' : 'text-hud-text-dim')}>EN</span>
+              <span className="text-hud-text-dim mx-1">|</span>
+              <span className={cn(locale === 'zh-TW' ? 'text-hud-primary' : 'text-hud-text-dim')}>中文</span>
+            </button>
+
             <Link
               href="/dashboard"
               className="font-mono text-hud-xs uppercase tracking-widest text-hud-text-dim hover:text-hud-primary transition-colors"
             >
-              Demo
+              {s.nav.demo}
             </Link>
 
             <HUDButton onClick={scrollToDemo} variant="primary" size="sm">
-              SCHEDULE MEETING
+              {s.nav.scheduleMeeting}
             </HUDButton>
           </div>
 
@@ -168,16 +183,28 @@ export default function LandingNav({
               </button>
             ))}
 
+            {/* Language toggle — mobile */}
+            <button
+              type="button"
+              onClick={toggleLocale}
+              className="font-mono text-lg tracking-wider px-3 py-2 rounded-sm transition-colors hover:bg-hud-primary/10"
+              aria-label="Toggle language"
+            >
+              <span className={cn(locale === 'en' ? 'text-hud-primary' : 'text-hud-text-dim')}>EN</span>
+              <span className="text-hud-text-dim mx-2">|</span>
+              <span className={cn(locale === 'zh-TW' ? 'text-hud-primary' : 'text-hud-text-dim')}>中文</span>
+            </button>
+
             <Link
               href="/dashboard"
               onClick={() => setMobileOpen(false)}
               className="font-mono text-lg uppercase tracking-widest text-hud-text-dim hover:text-hud-primary transition-colors"
             >
-              Demo
+              {s.nav.demo}
             </Link>
 
             <HUDButton onClick={scrollToDemo} variant="primary" size="md">
-              SCHEDULE MEETING
+              {s.nav.scheduleMeeting}
             </HUDButton>
           </div>
         </div>

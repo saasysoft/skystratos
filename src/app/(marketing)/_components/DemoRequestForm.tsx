@@ -1,6 +1,8 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from '@/lib/i18n/use-translation'
+import { getLandingStrings } from '@/lib/i18n/landing-i18n'
 
 const CAL_URL = 'https://cal.com/robot-friends/30min'
 
@@ -11,6 +13,8 @@ interface ScheduleMeetingSectionProps {
 export function DemoRequestForm({ preselectedTier: _preselectedTier }: ScheduleMeetingSectionProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const [loaded, setLoaded] = useState(false)
+  const { locale } = useTranslation()
+  const s = getLandingStrings(locale)
 
   // Fade in iframe once loaded to avoid white flash
   useEffect(() => {
@@ -27,10 +31,10 @@ export function DemoRequestForm({ preselectedTier: _preselectedTier }: ScheduleM
         {/* Section header */}
         <div className="text-center mb-12">
           <h2 className="font-mono text-3xl md:text-4xl font-bold text-hud-text-primary tracking-wider">
-            Schedule a Meeting
+            {s.schedule.headline}
           </h2>
           <p className="mt-4 font-sans text-lg text-hud-text-secondary max-w-xl mx-auto">
-            Book 30 minutes with our team to see SkyStratos in action and discuss your fleet operations.
+            {s.schedule.subhead}
           </p>
         </div>
 
@@ -43,7 +47,7 @@ export function DemoRequestForm({ preselectedTier: _preselectedTier }: ScheduleM
                 <div className="flex flex-col items-center gap-3">
                   <div className="h-8 w-8 border-2 border-hud-primary/30 border-t-hud-primary rounded-full animate-spin" />
                   <span className="font-mono text-hud-xs text-hud-text-dim uppercase tracking-widest">
-                    Loading calendar...
+                    {s.schedule.loading}
                   </span>
                 </div>
               </div>
@@ -68,7 +72,7 @@ export function DemoRequestForm({ preselectedTier: _preselectedTier }: ScheduleM
               rel="noopener noreferrer"
               className="font-mono text-hud-xs text-hud-text-dim hover:text-hud-primary transition-colors uppercase tracking-widest"
             >
-              Open in Cal.com &rarr;
+              {s.schedule.fallback} &rarr;
             </a>
           </div>
         </div>

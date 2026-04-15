@@ -3,8 +3,9 @@
 import { motion } from 'framer-motion';
 import { HUDPanel } from '@/components/hud/HUDPanel';
 import { HUDButton } from '@/components/hud/HUDButton';
-import { PRICING_TIERS } from '@/lib/data/landing-data';
 import type { PricingSectionProps } from '@/lib/types/landing';
+import { useTranslation } from '@/lib/i18n/use-translation';
+import { getLandingStrings, getPricingTiers } from '@/lib/i18n/landing-i18n';
 
 const containerVariants = {
   hidden: {},
@@ -25,7 +26,9 @@ const cardVariants = {
 };
 
 export function PricingSection({ id, className, onSelectTier }: PricingSectionProps) {
-  const tiers = PRICING_TIERS;
+  const { locale } = useTranslation();
+  const s = getLandingStrings(locale);
+  const tiers = getPricingTiers(locale);
 
   return (
     <section
@@ -42,10 +45,10 @@ export function PricingSection({ id, className, onSelectTier }: PricingSectionPr
           className="text-center mb-16"
         >
           <h2 className="font-mono text-3xl md:text-4xl lg:text-5xl font-bold text-hud-text-primary">
-            Built for Your Fleet, Priced for Your Scale
+            {s.pricing.headline}
           </h2>
           <p className="mt-4 font-sans text-lg text-hud-text-secondary max-w-2xl mx-auto">
-            Every deployment is custom-tailored to your airline&apos;s systems, workflows, and fleet size.
+            {s.pricing.subhead}
           </p>
         </motion.div>
 
@@ -76,7 +79,7 @@ export function PricingSection({ id, className, onSelectTier }: PricingSectionPr
                     {tier.highlighted && (
                       <div className="mb-4">
                         <span className="inline-block font-mono text-[10px] uppercase tracking-widest text-hud-primary bg-hud-primary/10 border border-hud-primary/30 rounded-sm px-2 py-0.5">
-                          Recommended
+                          {s.pricing.recommended}
                         </span>
                       </div>
                     )}
@@ -94,10 +97,10 @@ export function PricingSection({ id, className, onSelectTier }: PricingSectionPr
                     {/* Price */}
                     <div className="mt-6 mb-6">
                       <span className="font-mono text-3xl font-bold text-hud-text-primary">
-                        Contact Sales
+                        {s.pricing.contactSales}
                       </span>
                       <p className="font-mono text-xs text-hud-text-dim mt-1">
-                        Custom pricing per aircraft
+                        {s.pricing.customPricing}
                       </p>
                     </div>
 

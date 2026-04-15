@@ -8,6 +8,8 @@ import { HUDGauge } from '@/components/hud/HUDGauge'
 import { HUDIndicator } from '@/components/hud/HUDIndicator'
 import { HUDPanel } from '@/components/hud/HUDPanel'
 import { cn } from '@/lib/utils'
+import { useTranslation } from '@/lib/i18n/use-translation'
+import { getLandingStrings } from '@/lib/i18n/landing-i18n'
 
 // ── Cost label data ────────────────────────────────────────────────
 const COST_LABELS = [
@@ -254,6 +256,8 @@ function MobileStaticHero() {
 // ── Main HeroSection component ─────────────────────────────────────
 export function HeroSection({ id, className, onCtaClick }: HeroSectionProps) {
   const prefersReducedMotion = useReducedMotion()
+  const { locale } = useTranslation()
+  const s = getLandingStrings(locale)
 
   return (
     <section
@@ -264,11 +268,11 @@ export function HeroSection({ id, className, onCtaClick }: HeroSectionProps) {
       {/* Above the fold — always visible */}
       <div className="min-h-screen flex flex-col items-center justify-center px-4 text-center">
         <h1 className="font-mono text-4xl md:text-6xl text-hud-primary tracking-wider max-w-4xl">
-          Your Fleet&apos;s Hidden Costs — Made Visible
+          {s.hero.headline}
         </h1>
 
         <p className="font-mono text-hud-text-secondary text-lg md:text-xl max-w-2xl mt-6 leading-relaxed">
-          AI-powered fleet intelligence for airline maintenance executives who need answers, not dashboards
+          {s.hero.subhead}
         </p>
 
         <div className="flex flex-col sm:flex-row items-center gap-4 mt-10">
@@ -277,22 +281,22 @@ export function HeroSection({ id, className, onCtaClick }: HeroSectionProps) {
             variant="primary"
             size="lg"
           >
-            Schedule Meeting
+            {s.hero.cta}
           </HUDButton>
 
           <a
             href="/dashboard"
             className="font-mono text-hud-text-dim hover:text-hud-primary transition-colors duration-200 text-sm tracking-wider uppercase"
-            aria-label="Try the SkyStratos demo"
+            aria-label={s.hero.demoAria}
           >
-            Demo
+            {s.hero.demo}
           </a>
         </div>
 
         {/* Scroll hint — desktop only */}
         <div className="hidden md:flex flex-col items-center mt-16 animate-pulse-slow">
           <span className="font-mono text-hud-xs text-hud-text-dim uppercase mb-2">
-            Scroll to explore
+            {s.hero.scrollHint}
           </span>
           <svg
             width="20"
@@ -353,7 +357,7 @@ export function HeroSection({ id, className, onCtaClick }: HeroSectionProps) {
             {/* CTA */}
             <div className="flex justify-center">
               <HUDButton onClick={onCtaClick} variant="primary" size="lg">
-                Schedule Meeting
+                {s.hero.cta}
               </HUDButton>
             </div>
           </div>
@@ -377,7 +381,7 @@ export function HeroSection({ id, className, onCtaClick }: HeroSectionProps) {
                   variant="primary"
                   size="lg"
                 >
-                  Schedule Meeting
+                  {s.hero.cta}
                 </HUDButton>
               </motion.div>
             </div>
@@ -393,7 +397,7 @@ export function HeroSection({ id, className, onCtaClick }: HeroSectionProps) {
               variant="primary"
               size="lg"
             >
-              Schedule Meeting
+              {s.hero.cta}
             </HUDButton>
           </div>
         </>

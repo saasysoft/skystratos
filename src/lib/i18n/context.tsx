@@ -9,13 +9,15 @@ import {
   type SetStateAction,
 } from 'react';
 import en from './translations/en.json';
+import zhTW from './translations/zh-TW.json';
 
-export type Locale = 'en';
+export type Locale = 'en' | 'zh-TW';
 
 type TranslationObject = Record<string, unknown>;
 
 const translations: Record<Locale, TranslationObject> = {
   en,
+  'zh-TW': zhTW,
 };
 
 function resolve(obj: TranslationObject, key: string): string {

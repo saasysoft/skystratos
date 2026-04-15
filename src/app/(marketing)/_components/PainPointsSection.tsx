@@ -2,8 +2,9 @@
 
 import { motion } from 'framer-motion';
 import { HUDPanel } from '@/components/hud/HUDPanel';
-import { PAIN_POINTS } from '@/lib/data/landing-data';
 import type { PainPointsSectionProps } from '@/lib/types/landing';
+import { useTranslation } from '@/lib/i18n/use-translation';
+import { getLandingStrings, getPainPoints } from '@/lib/i18n/landing-i18n';
 
 const iconColors: Record<string, string> = {
   radar: 'bg-hud-primary/20 border-hud-primary/40',
@@ -31,7 +32,9 @@ const cardVariants = {
 };
 
 export function PainPointsSection({ id, className }: PainPointsSectionProps) {
-  const cards = PAIN_POINTS;
+  const { locale } = useTranslation();
+  const s = getLandingStrings(locale);
+  const cards = getPainPoints(locale);
 
   return (
     <section
@@ -48,8 +51,9 @@ export function PainPointsSection({ id, className }: PainPointsSectionProps) {
           className="text-center mb-16 md:mb-20"
         >
           <h2 className="font-mono text-3xl md:text-4xl lg:text-5xl font-bold text-hud-text-primary leading-tight">
-            Every grounded aircraft costs{' '}
-            <span className="text-hud-secondary">$10K-150K</span> per hour
+            {s.painPoints.headline}{' '}
+            <span className="text-hud-secondary">{s.painPoints.costRange}</span>
+            {s.painPoints.perHour ? ` ${s.painPoints.perHour}` : ''}
           </h2>
         </motion.div>
 

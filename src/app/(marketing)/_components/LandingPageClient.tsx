@@ -11,7 +11,6 @@ import LandingNav from './LandingNav'
 import LandingFooter from './LandingFooter'
 import { SectionErrorBoundary } from './SectionErrorBoundary'
 import { DemoRequestForm } from './DemoRequestForm'
-import { NAV_SECTIONS, PAIN_POINTS, PLATFORM_FEATURES, PRICING_TIERS } from '@/lib/data/landing-data'
 
 export default function LandingPageClient() {
   const lenisRef = useRef<Lenis | null>(null)
@@ -59,7 +58,7 @@ export default function LandingPageClient() {
 
   return (
     <>
-      <LandingNav sections={NAV_SECTIONS} />
+      <LandingNav />
 
       <main>
         <SectionErrorBoundary sectionName="Hero" fallbackHeight="100vh">
@@ -67,11 +66,11 @@ export default function LandingPageClient() {
         </SectionErrorBoundary>
 
         <SectionErrorBoundary sectionName="Pain Points" fallbackHeight="600px">
-          <PainPointsSection id="challenges" cards={PAIN_POINTS} />
+          <PainPointsSection id="challenges" />
         </SectionErrorBoundary>
 
         <SectionErrorBoundary sectionName="Platform Showcase" fallbackHeight="600px">
-          <PlatformShowcase id="platform" features={PLATFORM_FEATURES} />
+          <PlatformShowcase id="platform" />
         </SectionErrorBoundary>
 
         <SectionErrorBoundary sectionName="Tower AI" fallbackHeight="500px">
@@ -79,7 +78,7 @@ export default function LandingPageClient() {
         </SectionErrorBoundary>
 
         <SectionErrorBoundary sectionName="Pricing" fallbackHeight="600px">
-          <PricingSection id="pricing" tiers={PRICING_TIERS} onSelectTier={handleSelectTier} />
+          <PricingSection id="pricing" onSelectTier={handleSelectTier} />
         </SectionErrorBoundary>
 
         <SectionErrorBoundary sectionName="Demo Request" fallbackHeight="600px">

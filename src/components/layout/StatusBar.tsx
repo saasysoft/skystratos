@@ -12,7 +12,7 @@ interface StatusBarProps {
 export default function StatusBar({ alertCount = 0, alertSeverity = 'nominal' }: StatusBarProps) {
   const [time, setTime] = useState<string>('')
   const { t, locale, setLocale } = useTranslation()
-  const toggleLocale = () => setLocale(locale === 'en' ? 'en' : 'en')
+  const toggleLocale = () => setLocale(locale === 'en' ? 'zh-TW' : 'en')
 
   // Update clock every second -- only after mount to avoid hydration mismatch
   useEffect(() => {

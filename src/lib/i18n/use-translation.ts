@@ -1,11 +1,13 @@
 import { useCallback, useContext } from 'react';
 import { I18nContext, type Locale } from './context';
 import en from './translations/en.json';
+import zhTW from './translations/zh-TW.json';
 
 type TranslationObject = Record<string, unknown>;
 
 const translations: Record<Locale, TranslationObject> = {
   en,
+  'zh-TW': zhTW,
 };
 
 /**

@@ -26,16 +26,11 @@ export interface HeroSectionProps extends LandingSectionProps {
   onCtaClick: () => void;
 }
 
-export interface PainPointsSectionProps extends LandingSectionProps {
-  cards: PainPointCard[];
-}
+export interface PainPointsSectionProps extends LandingSectionProps {}
 
-export interface PlatformShowcaseSectionProps extends LandingSectionProps {
-  features: PlatformFeature[];
-}
+export interface PlatformShowcaseSectionProps extends LandingSectionProps {}
 
 export interface PricingSectionProps extends LandingSectionProps {
-  tiers: PricingTier[];
   onSelectTier: (tierId: string) => void;
 }
 

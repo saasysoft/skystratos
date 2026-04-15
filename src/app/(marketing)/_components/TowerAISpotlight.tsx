@@ -3,21 +3,8 @@
 import { motion } from 'framer-motion';
 import { HUDPanel } from '@/components/hud/HUDPanel';
 import type { LandingSectionProps } from '@/lib/types/landing';
-
-const messages = [
-  {
-    role: 'user' as const,
-    text: 'Which aircraft should I worry about this month?',
-  },
-  {
-    role: 'tower' as const,
-    text: null, // rendered as structured content
-  },
-  {
-    role: 'user' as const,
-    text: 'Show me the parts availability for N321SK',
-  },
-];
+import { useTranslation } from '@/lib/i18n/use-translation';
+import { getLandingStrings } from '@/lib/i18n/landing-i18n';
 
 const towerResponseTable = [
   { tail: 'N412SK', issue: 'AD 2024-15-06 due in 8 days', risk: 'HIGH' },
@@ -30,12 +17,6 @@ const riskColors: Record<string, string> = {
   MEDIUM: 'text-hud-warning',
   LOW: 'text-hud-nominal',
 };
-
-const bulletPoints = [
-  '9 specialized tools for fleet intelligence',
-  'Natural language \u2014 no dashboards to learn',
-  'Powered by Claude AI',
-];
 
 const messageVariants = {
   hidden: { opacity: 0, y: 16 },
@@ -51,6 +32,15 @@ const messageVariants = {
 };
 
 export function TowerAISpotlight({ id, className }: LandingSectionProps) {
+  const { locale } = useTranslation();
+  const s = getLandingStrings(locale);
+
+  const messages = [
+    { role: 'user' as const, text: s.tower.userMsg1 },
+    { role: 'tower' as const, text: null },
+    { role: 'user' as const, text: s.tower.userMsg2 },
+  ];
+
   const handleCtaClick = () => {
     const demoSection = document.getElementById('demo');
     if (demoSection) {
@@ -74,20 +64,19 @@ export function TowerAISpotlight({ id, className }: LandingSectionProps) {
           {/* Left — Text content */}
           <div className="flex flex-col gap-6">
             <span className="font-mono text-hud-secondary tracking-widest text-xs uppercase">
-              Tower AI Co-Pilot
+              {s.tower.label}
             </span>
 
             <h2 className="font-mono text-3xl md:text-4xl font-bold text-hud-text-primary">
-              Ask Your Fleet Anything
+              {s.tower.headline}
             </h2>
 
             <p className="font-sans text-hud-text-secondary leading-relaxed max-w-lg">
-              Tower AI understands your fleet data &mdash; maintenance schedules, parts inventory,
-              cost trends, compliance status. Ask in plain English, get actionable intelligence.
+              {s.tower.description}
             </p>
 
             <ul className="flex flex-col gap-3 mt-2">
-              {bulletPoints.map((point) => (
+              {s.tower.bullets.map((point) => (
                 <li key={point} className="flex items-center gap-3">
                   <span className="h-1.5 w-1.5 rounded-full bg-hud-primary flex-shrink-0" />
                   <span className="font-sans text-sm text-hud-text-secondary">{point}</span>
@@ -107,7 +96,7 @@ export function TowerAISpotlight({ id, className }: LandingSectionProps) {
                 transition-all duration-200
               "
             >
-              See Tower in Action
+              {s.tower.cta}
             </button>
           </div>
 
@@ -138,15 +127,15 @@ export function TowerAISpotlight({ id, className }: LandingSectionProps) {
                         <span className="h-2 w-2 rounded-full bg-hud-primary mt-1.5 flex-shrink-0" />
                         <div className="flex-1 space-y-2">
                           <p className="font-mono text-xs text-hud-text-secondary">
-                            3 aircraft flagged for attention this month:
+                            {s.tower.response}
                           </p>
                           <div className="bg-hud-surface/50 rounded p-3 overflow-x-auto">
                             <table className="w-full font-mono text-[11px]">
                               <thead>
                                 <tr className="text-hud-text-dim uppercase">
-                                  <th className="text-left pr-4 pb-1.5">Tail #</th>
-                                  <th className="text-left pr-4 pb-1.5">Issue</th>
-                                  <th className="text-left pb-1.5">Risk</th>
+                                  <th className="text-left pr-4 pb-1.5">{s.tower.colTail}</th>
+                                  <th className="text-left pr-4 pb-1.5">{s.tower.colIssue}</th>
+                                  <th className="text-left pb-1.5">{s.tower.colRisk}</th>
                                 </tr>
                               </thead>
                               <tbody>

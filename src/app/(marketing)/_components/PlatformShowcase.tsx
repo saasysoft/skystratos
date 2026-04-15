@@ -6,10 +6,11 @@ import { HUDPanel } from '@/components/hud/HUDPanel';
 import { HUDGauge } from '@/components/hud/HUDGauge';
 import { HUDStatusBar } from '@/components/hud/HUDStatusBar';
 import { HUDIndicator } from '@/components/hud/HUDIndicator';
-import { PLATFORM_FEATURES } from '@/lib/data/landing-data';
 import type { PlatformShowcaseSectionProps, PlatformFeature } from '@/lib/types/landing';
+import { useTranslation } from '@/lib/i18n/use-translation';
+import { getLandingStrings, getPlatformFeatures } from '@/lib/i18n/landing-i18n';
 
-function RadarDemo() {
+function RadarDemo({ previewLabel }: { previewLabel: string }) {
   return (
     <div className="relative flex items-center justify-center h-64 overflow-hidden rounded">
       {/* Radar sweep animation */}
@@ -44,7 +45,7 @@ function RadarDemo() {
         }
       `}</style>
       <p className="absolute bottom-3 font-mono text-xs text-hud-text-dim uppercase tracking-wider">
-        Live Fleet Map Preview
+        {previewLabel}
       </p>
     </div>
   );
@@ -97,10 +98,10 @@ function TowerDemo() {
   );
 }
 
-function FeatureDemo({ feature }: { feature: PlatformFeature }) {
+function FeatureDemo({ feature, previewLabel }: { feature: PlatformFeature; previewLabel: string }) {
   switch (feature.hudComponent) {
     case 'radar':
-      return <RadarDemo />;
+      return <RadarDemo previewLabel={previewLabel} />;
     case 'indicator':
       return <IndicatorDemo />;
     case 'gauge':
@@ -113,7 +114,9 @@ function FeatureDemo({ feature }: { feature: PlatformFeature }) {
 }
 
 export function PlatformShowcase({ id, className }: PlatformShowcaseSectionProps) {
-  const features = PLATFORM_FEATURES;
+  const { locale } = useTranslation();
+  const s = getLandingStrings(locale);
+  const features = getPlatformFeatures(locale);
   const [activeIndex, setActiveIndex] = useState(0);
   const activeFeature = features[activeIndex];
 
@@ -132,10 +135,10 @@ export function PlatformShowcase({ id, className }: PlatformShowcaseSectionProps
           className="text-center mb-16"
         >
           <h2 className="font-mono text-3xl md:text-4xl lg:text-5xl font-bold text-hud-text-primary">
-            One Command Center for Your Entire Fleet
+            {s.platform.headline}
           </h2>
           <p className="mt-4 font-sans text-lg text-hud-text-secondary max-w-2xl mx-auto">
-            Four integrated modules. One screen. Zero guesswork.
+            {s.platform.subhead}
           </p>
         </motion.div>
 
@@ -183,7 +186,7 @@ export function PlatformShowcase({ id, className }: PlatformShowcaseSectionProps
               {/* Visual demo — 60% */}
               <div className="col-span-3">
                 <div className="bg-hud-bg rounded-lg border border-hud-border/20 p-4">
-                  <FeatureDemo feature={activeFeature} />
+                  <FeatureDemo feature={activeFeature} previewLabel={s.platform.livePreview} />
                 </div>
               </div>
             </motion.div>
@@ -217,7 +220,7 @@ export function PlatformShowcase({ id, className }: PlatformShowcaseSectionProps
                       <p className="font-sans text-sm text-hud-text-secondary mb-4">
                         {feature.description}
                       </p>
-                      <FeatureDemo feature={feature} />
+                      <FeatureDemo feature={feature} previewLabel={s.platform.livePreview} />
                     </div>
                   </motion.div>
                 )}

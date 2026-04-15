@@ -1,36 +1,42 @@
+'use client'
+
 import Link from 'next/link'
 import type { LandingFooterProps } from '@/lib/types/landing'
 import { cn } from '@/lib/utils'
-
-const footerColumns = [
-  {
-    heading: 'PRODUCT',
-    links: [
-      { label: 'Fleet Intelligence', href: '#platform' },
-      { label: 'Maintenance AI', href: '#platform' },
-      { label: 'Cost Analytics', href: '#platform' },
-      { label: 'Tower AI Co-Pilot', href: '#platform' },
-    ],
-  },
-  {
-    heading: 'COMPANY',
-    links: [
-      { label: 'About', href: '#hero' },
-      { label: 'Pricing', href: '#pricing' },
-      { label: 'Contact', href: '#demo-request' },
-    ],
-  },
-  {
-    heading: 'LEGAL',
-    links: [
-      { label: 'Terms of Service', href: '/terms' },
-      { label: 'Privacy Policy', href: '/privacy' },
-    ],
-  },
-] as const
+import { useTranslation } from '@/lib/i18n/use-translation'
+import { getLandingStrings } from '@/lib/i18n/landing-i18n'
 
 export default function LandingFooter({ className }: LandingFooterProps) {
   const year = new Date().getFullYear()
+  const { locale } = useTranslation()
+  const s = getLandingStrings(locale)
+
+  const footerColumns = [
+    {
+      heading: s.footer.product,
+      links: [
+        { label: s.footer.fleetIntelligence, href: '#platform' },
+        { label: s.footer.maintenanceAI, href: '#platform' },
+        { label: s.footer.costAnalytics, href: '#platform' },
+        { label: s.footer.towerCoPilot, href: '#platform' },
+      ],
+    },
+    {
+      heading: s.footer.company,
+      links: [
+        { label: s.footer.about, href: '#hero' },
+        { label: s.footer.pricing, href: '#pricing' },
+        { label: s.footer.contact, href: '#demo-request' },
+      ],
+    },
+    {
+      heading: s.footer.legal,
+      links: [
+        { label: s.footer.terms, href: '/terms' },
+        { label: s.footer.privacy, href: '/privacy' },
+      ],
+    },
+  ]
 
   return (
     <footer
@@ -68,12 +74,12 @@ export default function LandingFooter({ className }: LandingFooterProps) {
           <div className="flex flex-col items-center gap-6 md:flex-row md:justify-between">
             {/* Left: CTA */}
             <p className="font-mono text-hud-sm text-hud-text-dim text-center md:text-left">
-              Ready to see what&apos;s grounding your fleet?{' '}
+              {s.footer.cta}{' '}
               <Link
                 href="#demo-request"
                 className="text-hud-primary hover:underline"
               >
-                Schedule Meeting
+                {s.footer.ctaLink}
               </Link>
             </p>
 
@@ -83,14 +89,16 @@ export default function LandingFooter({ className }: LandingFooterProps) {
                 SKYSTRATOS
               </span>
               <span className="font-mono text-[10px] uppercase tracking-widest text-hud-text-dim">
-                Fleet Intelligence Platform
+                {s.footer.tagline}
               </span>
             </div>
           </div>
 
           {/* Copyright */}
           <p className="mt-8 text-center font-mono text-[10px] uppercase tracking-widest text-hud-text-dim">
-            &copy; {year} SkyStratos. All rights reserved.
+            &copy; {year} {s.footer.tagline === 'Fleet Intelligence Platform'
+              ? 'SkyStratos. All rights reserved.'
+              : 'SkyStratos\u3002\u7248\u6b0a\u6240\u6709\u3002'}
           </p>
         </div>
       </div>
