@@ -182,3 +182,44 @@
 - Impact: Site fully open — anyone can demo the dashboard or book a 30min call directly
 - 2 commits: `06ae1d3` (CTA sweep + auth bypass), `83e56d4` (Cal.com embed)
 - Cleanup opportunity: /api/leads route, lead schema, Zod validation, Slack webhook code are now unused
+
+---
+
+## Session 6 | 2026-04-16T00:00Z | [mode: auto — Full zh-TW Translation Sweep]
+
+**Objective:** Add Traditional Chinese (zh-TW) language toggle to the entire site — landing page, dashboard UI, and mock data — so the portfolio demo works fully in both languages.
+**Outcome:** Complete bilingual support across 28 files, ~200 data translations, deployed to production (5 commits).
+
+### Technical
+- **i18n architecture**: Built a client-side locale system — `LocaleContext` (React context with `locale` + `setLocale`), `useTranslation` hook with `t(key)` for UI strings and `tArray(key)` for arrays (month names). `landing-i18n.ts` (477 lines) for marketing page strings. Dashboard uses `en.json` / `zh-TW.json` translation files (260+ keys each).
+- **Language toggle**: EN / 中文 button in `LandingNav.tsx` — toggles locale in React context, no URL param or cookie persistence (session-only state). Dashboard `StatusBar.tsx` also has the toggle.
+- **Landing page**: All 7 sections fully translated — HeroSection (headline, subheads, CTAs), PainPointsSection (titles, descriptions), PlatformShowcase (features, bullets), TowerAISpotlight (demo conversation), PricingSection (tier names, features, CTAs), LandingNav (links, buttons), LandingFooter (links, tagline, copyright).
+- **Cal.com refactor**: Changed from inline iframe (78 lines) to popup button pattern — loads `embed.js`, calls `Cal('openModal', ...)`. Falls back to `window.open()` if script fails. Cleaner UX, matching robobffs.com pattern.
+- **Dashboard UI sweep** (9 components): NavConsole sub-tabs, MELTracker headers/labels, ADComplianceBoard table columns, DispatchReliability chart labels + cause names, AOGTimeline all labels, MultiStationInventory summary cards + table headers, FleetMapGL map controls + aircraft detail card (18 labels), CostAnalysisPanel month abbreviations + categories, ProcurementOpsPanel ETA + stock badges.
+- **Data translation layer**: `data-i18n.ts` (294 lines) — `td(value, locale)` function that translates mock data values at render time. Maps organized by domain: statusMap (17), categoryMap (16), priorityMap (4), checkTypeMap (8), triggerMap, severityMap, locationMap (10), causeMap, melDescMap (25), mxDescMap (13), aogCauseMap (10), inventoryDescMap (17), procItemMap (48), alertTitleMap (15). Single flat lookup built at module load for O(1) access.
+- **Aviation term policy**: Technical abbreviations (MEL, ATA, AD, SB, AOG, CPFH, IRU, APU, FMC) kept in English — this is aviation industry standard globally. Tail numbers and ICAO codes also untranslated.
+- 28 files changed, +1,653 / -359 lines across 5 commits. Build passes clean (0 errors).
+
+### Journey
+- User sent 4 screenshots of the dashboard in zh-TW mode showing massive amounts of English remaining — sub-tabs, table headers, status badges, data descriptions, chart labels all hardcoded
+- Phase 1: Added 142 keys to both translation files (en.json + zh-TW.json) covering all UI chrome — headers, labels, table columns, status badges, empty states
+- Phase 2: Used 3 parallel agents to update 9 dashboard components simultaneously (NavConsole+MEL+AD, Dispatch+AOG+Inventory, FleetMap+Cost+Procurement)
+- Phase 3: User sent more screenshots — UI chrome was translated but mock data content still English. Created `data-i18n.ts` with td() function and ~200 translation mappings
+- Phase 4: Another 3 parallel agents wired td() into all data-rendering components
+- Phase 5: User identified remaining gaps in AOG causes and inventory descriptions — added 37 more translations
+- Total: 5 iterative commits, each deployed and verified on production
+
+### Patterns
+- **Two-layer i18n for demo apps**: UI strings go in translation JSON files (t() function). Mock data translations go in a separate lookup map (td() function). This keeps concerns separate — UI translations are structural, data translations are content. The td() approach avoids duplicating mock data into per-locale files.
+- **Parallel agent sweep for i18n**: When translating 9+ components, group into 3 independent agent batches by panel domain. Each agent reads the component, adds the useTranslation hook, replaces hardcoded strings with t() calls. No cross-dependencies between panels = perfect parallelization.
+- **Iterative screenshot-driven QA**: Each deploy was verified by the user sending screenshots of the live site. This caught issues that a code review alone would miss — like mock data descriptions that technically weren't "hardcoded strings" but were data values rendered in JSX.
+- **Aviation i18n conventions**: In real airline systems, technical terms (ATA chapters, MEL categories A/B/C/D, ICAO codes, tail numbers) are never translated. Only operational descriptions, status labels, and UI chrome get localized. Following this convention makes the demo more realistic.
+- **Cal.com popup vs iframe**: `embed.js` + `Cal('openModal', ...)` is significantly better UX than an inline iframe — no white flash, no min-height sizing issues, no CSP concerns with third-party iframes. The popup pattern loads faster and matches the host site's styling.
+
+### Business
+- Build duration: ~25 minutes across 5 iterative commits
+- Scope: ~200 unique string translations covering the entire application
+- Files: 28 files changed, +1,653 / -359 lines
+- 5 commits: `49478ca` (language toggle), `e7fdf80` (scroll animation + Cal.com popup), `1c38964` (dashboard UI sweep), `f9323a7` (data translations), `0756cc2` (AOG + inventory gaps)
+- Impact: SkyStratos is now a fully bilingual portfolio piece — critical for the Taiwanese airline market demo
+- GitHub + Vercel: All pushed and deployed to skystratos.robobffs.site

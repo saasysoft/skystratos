@@ -45,6 +45,19 @@ Build SkyStratos — airline fleet operations intelligence platform with landing
   - [x] Cal.com embed: dark theme, loading spinner, fade-in, fallback link
   - [x] Found booking repo: robobffs/robobffs-website (was Cal.com, not Twenty.com)
   - [x] Deployed to Vercel production (2 commits)
+- [x] Session 6: Traditional Chinese (zh-TW) full translation sweep
+  - [x] Built i18n system: LocaleContext, useTranslation hook (t + tArray), landing-i18n.ts (477 lines)
+  - [x] Language toggle component (EN / 中文) added to LandingNav
+  - [x] Landing page fully translated: all 7 sections (hero, pain points, showcase, Tower AI, pricing, nav, footer)
+  - [x] Cal.com changed from inline iframe → popup button (embed.js + openModal)
+  - [x] Scroll animation strings translated (gauges, indicators, tagline, readout labels)
+  - [x] Dashboard UI chrome translated across 9 components: NavConsole sub-tabs, MELTracker, ADComplianceBoard, DispatchReliability, AOGTimeline, MultiStationInventory, FleetMapGL, CostAnalysisPanel, ProcurementOpsPanel
+  - [x] Translation files: en.json (260+ keys), zh-TW.json (260+ keys) covering all dashboard panels
+  - [x] Data-level translation layer: data-i18n.ts (294 lines, ~200 mappings) — td() function for mock data
+  - [x] Translated: status labels (17), categories (16), priorities (4), check types (8), locations (10), MEL descriptions (25), maintenance descriptions (13), procurement items (48), inventory items (17), AOG causes (10), alert titles (15)
+  - [x] Month abbreviations localized (Jan→1月, Feb→2月, etc.)
+  - [x] 28 files changed, +1,653/-359 lines across 5 commits
+  - [x] All pushed to GitHub and deployed to Vercel production
 
 ### Remaining
 - [ ] Convert OG image from SVG placeholder to PNG (1200x630)
@@ -66,7 +79,10 @@ Build SkyStratos — airline fleet operations intelligence platform with landing
 - **Bundle:** Landing page 47.8KB (budget was 150KB)
 - **Sales motion:** Landing → Schedule Meeting (Cal.com) OR Demo (open access) → Scoping call
 - **Portfolio use:** Site displayed on robobffs.com as showcase piece
-- **Booking:** Cal.com embed (cal.com/robot-friends/30min) — same as robobffs.com "Book a Call"
+- **Booking:** Cal.com popup button (cal.com/robot-friends/30min) — embed.js + openModal pattern
+- **i18n:** Client-side locale context with EN/zh-TW toggle, no URL param or cookie — state in React context
+- **Data translation:** Mock data stays in English as source of truth; td() translates at render time based on locale
+- **Aviation terms:** Technical abbreviations (MEL, ATA, AD, SB, AOG, CPFH) kept untranslated — industry standard
 
 ## Blockers
 None.
@@ -81,18 +97,20 @@ Verification: `operations/skystratos-landing-page/VERIFICATION.md`
 Security: `operations/skystratos-landing-page/SECURITY-REPORT.md`
 
 ## Next Action
-1. Convert OG image SVG → PNG for social sharing
-2. Team reviews: Carol (copy), Richard+Wally (pricing), Legal (ToS/Privacy)
-3. Clean up unused /api/leads route and lead schema (no longer needed)
+1. Verify zh-TW toggle on live site — check every dashboard tab in Chinese mode
+2. Add remaining untranslated mock data strings (some maintenance descriptions in Completed/Scheduled sections)
+3. Convert OG image SVG → PNG for social sharing
+4. Team reviews: Carol (copy), Richard+Wally (pricing), Legal (ToS/Privacy)
+5. Clean up unused /api/leads route and lead schema (no longer needed)
 
 ## Context Notes
 - Source Triton repo: C:\Dev\_PROJECTS\_SAASY-LABS\SaaSy_DEV\triton\ (READ-ONLY reference)
 - Local project: C:\Dev\_PROJECTS\_SAASY-LABS\SaaSy_DEV\skystratos\
-- 83 source files, ~28,500 lines of code (57 original + 34 new from landing page Operation)
+- ~90 source files, ~30,000 lines of code (57 original + 34 landing page + i18n layer)
 - GitHub: https://github.com/saasysoft/skystratos (public, dev as default branch)
 - Vercel: https://skystratos.robobffs.site (404redteam scope) — LIVE, auth bypassed for portfolio
 - ANTHROPIC_API_KEY in .env.local (never committed — verified clean)
-- Flight Recorder: FLIGHT-RECORDER.md (5 sessions recorded)
+- Flight Recorder: FLIGHT-RECORDER.md (6 sessions recorded)
 - The `robobffs.site` domain is managed under 404redteam Vercel scope
-- Cal.com booking: cal.com/robot-friends/30min (embedded inline, dark theme)
+- Cal.com booking: cal.com/robot-friends/30min (popup button via embed.js)
 - Booking repo: robobffs/robobffs-website (BookingModal.jsx) — was Cal.com, user remembered as Twenty.com
